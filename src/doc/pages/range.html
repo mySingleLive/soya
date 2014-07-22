@@ -1,0 +1,142 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Control Structures</title>
+    <link type="text/css" rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="background">
+    <div>
+        <h2>集合 -- Range</h2>
+        <div>
+            Range能定义一组在一定区间范围内的集合，以最小值和最大值限定区间范围。Soya中的集合有一下集中形式
+            <ul>
+                <li>以符号 .. 定义的Range，为闭区间，范围包含左右两边的值。</li>
+                <li>以符号 >..&lt; 定义的Range，为开区间，范围不包含左右两边的值。</li>
+                <li>以符号 >.. 定义的Range，为左开右闭区间，范围不包含左边的值，而包含右边的值。</li>
+                <li>以符号 ..&lt; 定义的Range，为左闭右开区间，范围包含左边的值，而不包含右边的值。</li>
+            </ul>
+            <div class="code">
+                <pre>
+range := 1..10
+assert range.size == 10
+assert range.get(1) == 2
+assert range[2] == 3
+assert range[-1] == 10 // last number
+assert range.contains(1)
+assert range.contains(10)
+
+range = 3..<9
+assert range.size == 6
+assert range[0] == 3
+assert range[-1] == 8 // last number is 8
+assert range.contains(5)
+assert !range.contains(9)
+
+range = 2>..8
+assert range.size == 6
+assert range[0] == 3
+assert range[2] == 5
+assert range.contains(3)
+assert !range.contains(2)
+assert rang.contains(8)
+
+range = 4>..<10
+assert range.size == 5
+assert !range.contains(4)
+assert !range.contains(10)
+assert range.from == 4
+assert range.to == 10
+assert !range.includeFrom
+assert !range.includeTo</pre>
+            </div>
+        </div>
+        <div>在左右两边的其中一边空着不写任何值，可以表示其中一边没有边界</div>
+        <div class="code">
+            <pre>
+range := 2..
+assert range.to == null
+// as same as 'x >=2'
+assert 4 is range
+
+range = ..<6
+assert range.from == null
+// as same as 'x < 6'
+assert 2 is range
+assert 6 is not range
+            </pre>
+        </div>
+        <div>
+            Range可以用在for in循环语句中来进行遍历数据。
+        </div>
+        <div class="code">
+                <pre>
+// iterate data from 1 to 10
+for (x in 1..10) {
+    ...
+}
+
+// iterate data from 2 to 10
+for (x in 1>..10) {
+    ...
+}
+
+// iterate data from 2 to 9
+for (x in 1>..<10) {
+    ...
+}</pre>
+        </div>
+        <div>
+            除了for in循环，Range还能通过each方法进行遍历。
+        </div>
+        <div class="code">
+            <pre>
+(1..10).each {
+    println("value = {it}")
+}
+
+// get index value by parameter 'Index i'
+(1..10).each(Index i) {
+    println("index = {i}, value = {it}")
+}
+
+/*
+ * 遍历的同时通过Pattern参数数筛选数据
+ * int[value: 3..] 为Pattern, 表示筛选3和大于3的整数
+ */
+(1..10).each(int[value: 3..] o, Index i) {
+    println("index = {i}, value = {o}")
+}</pre>
+        </div>
+        <div>
+            Range也可以在match语句中作为匹配条件使用
+        </div>
+        <div class="code">
+            <pre>
+score match
+   |  90..100  -> println('excellent')
+   |  80..<90  -> println('good')
+   |  60..<80  -> println('passed')
+   |  ..<60    -> println('not passed')
+            </pre>
+        </div>
+        <div>
+            Range可以在很多地方作为匹配参数使用，比如List的筛选条件，循环Index的范围。
+        </div>
+        <div class="code">
+            <pre>
+list := [2, 4, 'xyz', 32, 80, 3]
+assert list.find(50..) == [80]
+assert list[1..10] == [2, 4, 3]
+assert list[Index[value: 3..]] == [32, 80, 3]</pre>
+        </div>
+        <div>
+            Range可以简单地转行为List类型对象
+        </div>
+        <div class="code">
+            <pre>
+assert (1..5).toArray == [1, 2, 3, 4, 5]</pre>
+        </div>
+    </div>
+</div>
+</body>

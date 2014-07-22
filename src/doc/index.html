@@ -1,0 +1,331 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Soya 1.0-bata Documentation</title>
+        <link type="text/css" rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+        <div class="background">
+            <div>
+                <h2>Soya程序语言文档</h2>
+                <h4>适用于1.0-beta版本</h4>
+            </div>
+            <div>龚骏 (<a href="mailto:gongjun_dt@yahoo.com">gongjun_dt@yahoo.com</a>)</div>
+            <div class="index">
+                <ul>
+                    <li>
+                        <a href="pages/condiguration.html">配置和运行</a>
+                    </li>
+                    <li>
+                        <a href="pages/operators.html">操作符</a>
+                    </li>
+                    <li>
+                        <a href="pages/control-structures.html">控制结构</a>
+                        <ul>
+                            <li><a href="pages/branch.html">分支</a></li>
+                            <li><a href="pages/loop.html">循环</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="pages/variables.html">变量</a>
+                    </li>
+                    <li>
+                        <a href="pages/assignment.html">赋值</a>
+                    </li>
+                    <li>
+                        <a href="pages/collections.html">集合</a>
+                        <ul>
+                            <li>
+                                <a href="pages/range.html">Range</a>
+                            </li>
+                            <li>
+                                <a href="pages/list.html">List</a>
+                            </li>
+                            <li>
+                                <a href="pages/map.html">Map</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="pages/strings.html">字符串</a>
+                    </li>
+
+                    <li>
+                        <a href="pages/regex.html">正则表达式</a>
+                    </li>
+                    <li>
+                        <a href="pages/date-time.html">日期和时间</a>
+                    </li>
+                    <li>
+                        <a href="pages/files.html">文件</a>
+                    </li>
+                    <li>
+                        <a href="pages/url.html">URL</a>
+                    </li>
+                    <li>
+                        <a href="pages/closure.html">闭包</a>
+                    </li>
+                    <li>
+                        <a href="pages/exceptions.html">异常</a>
+                    </li>
+                    <li>
+                        <a href="pages/class.html">面向对象</a>
+                    </li>
+                    <li>
+                        <a href="pages/pattern-class.html">模式匹配</a>
+                    </li>
+                    <li>
+                        <a href="pages/language-comparions.html">和其他语言比较</a>
+                        <ul>
+                            <li>
+                                <a href="pages/groovy-comparison.html">和Groovy的比较</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+            <br/>
+            <h3>概览</h3>
+            <div>
+                Soya语言是一门基于Java的动态类型语言，融合了面向对象、函数式以及一些逻辑式语言的特征，以尝试探索新的编程方式。它提供了丰富的字面量类型，以方便对常用功能的直接操作。它还包括带缩进的类YAML集合语法，能以更直观的方式表达数据结构。Soya语言对模式匹配有很好的支持，提供了一些内置的模式类型，还支持通过模式的别名传递值。Soya语言由Java编写并且被编译成Java字节码在JVM上运行，能很调用其他Java代码，包括所有的Java API。
+            </div>
+            <h3>Hello, World</h3>
+            <div>作为介绍一门编程语言的常用手段，让我们先来看看用Soya写Hello, World是怎样的形式。</div>
+            <div class="code">
+                <pre>
+println('Hello, World')</pre>
+            </div>
+            <h3>一些例子</h3>
+            <div>
+                如果您想更直观地了解这门语言有什么不一样的语法特性，请看下面的一些例子
+            </div>
+            <div style="margin: 20px 0px 30px 0px;">
+                <table class="doc_table code_table" style="width: 100%">
+                    <tbody>
+                    <tr>
+                        <th>Soya</th>
+                        <th>Java</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre>
+def fibnacci(n) ->
+   | 1 | 2 -> 1
+   | _ -> fibnacci(n - 1) + fibnacci(n - 2)
+
+num := fibnacci(8)
+println(num)
+                            </pre>
+                        </td>
+                        <td>
+                            <pre>
+public class Fibonacci {
+    static int fibonacci(int n) {
+        if (n == 1 || n == 2)
+           return 1;
+        return fibonacci(n-1) + fibonacci(n-2);
+    }
+
+    public static void main(String args[]) {
+        int num = fibonacci(8);
+        System.out.println(num);
+    }
+}
+                            </pre>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre>
+def sumOfInt(list, min, max) {
+    ret := 0
+    // filter out the int values
+    // between min & max
+    list.each(int[value: min..max] i) {
+        ret += i
+    }
+    ret
+}
+
+list := [2, 4, 5, 'abc', 1, 'xx', -3, 21]
+sumOfInt(list, 0, 10) // --> 12
+                            </pre>
+                        </td>
+                        <td>
+                            <pre>
+import java.util.*;
+
+public class Sum {
+    static int sumOfInt(List list, int min, int max) {
+        int ret = 0;
+        for (int i = 0; i < list.size(); i++) {
+            Object obj = list.get(i);
+            if (obj instanceof Integer) {
+                int n = ((Integer) obj).intValue();
+                if (n >= min && n <= max) {
+                    ret += n;
+                }
+            }
+        }
+        return ret;
+    }
+
+    public static void main(String args[]) {
+        List list = new ArrayList();
+        list.add(2);
+        list.add(4);
+        list.add(5);
+        list.add("abc");
+        list.add(1);
+        list.add("xx");
+        list.add(-3);
+        list.add(21);
+        sumOfInt(list);
+    }
+}
+
+                            </pre>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre>
+// creata a list
+table :=
+   * id: 1
+     name: 'Peter'
+   * id: 2
+     name: 'Marry'
+   * id: 3
+     name: 'John'
+   * id: 4
+     name: 'Steven'
+
+
+scores :=
+   * id: 3
+     score: 8
+   * id: 1
+     score: 6
+   * id: 4
+     score: 7
+   * id: 2
+     score: 9
+
+
+scores.sortBy('id')
+
+println(scores*.score)
+// --> [6, 9, 8, 7]
+                            </pre>
+                        </td>
+                        <td>
+                            <pre>
+import java.util.*;
+
+public class Table {
+    static List sortBy(List list, String key) {
+        // Skip the 'sort by' code
+        return list
+    }
+
+    static List getEachScore(List list) {
+        List results = new ArrayList();
+        for (Object item : list) {
+            if (item instanceof Map) {
+                Object o = ((Map) item).get("score");
+                results.add(o);
+            }
+        }
+        return results;
+    }
+
+    public static void main(String args[]) {
+        List table = new ArrayList();
+        Map map1 = new HashMap();
+        map1.put("id", 1);
+        map1.put("name", "Peter");
+        Map map2 = new HashMap();
+        map2.put("id", 2);
+        map2.put("name", "Marry");
+        Map map3 = new HashMap();
+        map3.put("id", 3);
+        map3.put("name", "John");
+        Map map4 = new HashMap();
+        map4.put("id", 4);
+        map4.put("name", "Steven");
+        table.add(map1);
+        table.add(map2);
+        table.add(map3);
+        table.add(map4);
+
+        List scores = new ArrayList();
+        Map map5 = new HashMap();
+        map5.put("id", 3);
+        map5.put("score", 8);
+        Map map6 = new HashMap();
+        map6.put("id", 1);
+        map6.put("score", 6);
+        Map map7 = new HashMap();
+        map7.put("id", 4);
+        map7.put("score", 7);
+        Map map8 = new HashMap();
+        map8.put("id", 2);
+        map8.put("score", 9);
+        scores.add(map5);
+        scores.add(map6);
+        scores.add(map7);
+        scores.add(map8);
+
+        sortBy(scores, "id");
+        System.out.println(getEachScore(scores));
+    }
+}
+
+                            </pre>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre>
+%yahoo.html < http://www.yahoo.com .read
+                            </pre>
+                        </td>
+                        <td>
+                            <pre>
+import org.apache.commons.httpclient.*;
+import java.io.*;
+
+public class ReadYahoo {
+    public static void main(String args[])
+                            throws Throwable {
+        String url = "http://www.yahoo.com";
+        HttpClient httpClient = new HttpClient();
+        GetMethod method = new GetMethod(url);
+        httpClient.executeMethod(method);
+        String response =
+                method.getResponseBodyAsString();
+        method.releaseConnection();
+
+        File file = new File("yahoo.html");
+        FileWriter writer = null;
+        try {
+            writer = new FileWriter(file, false);
+            writer.write(response);
+        } catch (IOException e) {
+            throw e;
+        } finally {
+            writer.close();
+        }
+
+    }
+}</pre>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

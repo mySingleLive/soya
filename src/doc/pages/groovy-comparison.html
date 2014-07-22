@@ -1,0 +1,279 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Language Comparisons -- Soya 1.0-bata</title>
+    <link type="text/css" rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="background">
+        <div>
+            <h2>和Groovy的比较</h2>
+        </div>
+        <div>
+            <h3>Collection</h3>
+        </div>
+        <table class="doc_table code_table" style="width: 100%">
+            <tbody>
+                <tr>
+                    <td>
+                        <pre>
+map :=
+   id: 3
+   name: 'Geoge'
+   age: 21
+                        </pre>
+                    </td>
+                    <td>
+                        <pre>
+def map = {
+    id: 3,
+    name: 'Geoge',
+    age: 21
+}
+                        </pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <pre>
+list :=
+   * 2 + 5
+   * 'room'
+   * book.name
+                        </pre>
+                    </td>
+                    <td>
+                        <pre>
+def list = [2 + 5, 'room', book.name]
+                        </pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <pre>
+list :=
+   * id: 2
+     name: 'Peter'
+   * id: 4
+     name: 'Marry'
+   * id: 5
+     name: 'Steven'
+   * id: 9
+     name: 'Mike'</pre>
+                    </td>
+                    <td>
+                        <pre>
+def list = [
+   {
+      id: 2,
+      name: 'Peter'
+   }, {
+      id: 4,
+      name: 'Marry'
+   }, {
+      id: 5,
+      name: 'Steven'
+   }, {
+      id: 9,
+      name: 'Mike'
+   }
+]
+                        </pre>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div>
+            <h3>Date</h3>
+        </div>
+        <table class="doc_table code_table" style="width: 100%">
+            <tbody>
+                <tr>
+                    <td>
+                        <pre>
+date := 2012/3/4
+                        </pre>
+                    </td>
+                    <td>
+                        <pre>
+def str = '2012/3/4'
+def df = new SimpleDateFormat("yyyy/MM/dd")
+def date = df.parse(str)
+                        </pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <pre>
+date1 := 2013-3-5 10:20
+date2 := 2013-4-6
+printf(date2 - date1)
+                        </pre>
+                    </td>
+                    <td>
+                        <pre>
+def df1 = new SimpleDateFormat("yyyy-MM-dd hh:mm")
+def df2 = new SimpleDateFormat("yyyy-MM-dd")
+def str1 = '2013-3-5 10:20'
+def str2 = '2013-4-6'
+def date1 = df1.parse(str1)
+def date2 = df2.parse(str2)
+println(date2 - date1)
+                        </pre>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div>
+            <h3>IO</h3>
+        </div>
+        <table class="doc_table code_table" style="width: 100%">
+            <tbody>
+                <tr>
+                    <td>
+                        <pre>
+file1 := %tmp.txt
+i := 2
+ext := 'htm'
+file2 := %foo_{i}.{ext}
+                        </pre>
+                    </td>
+                    <td>
+                        <pre>
+def file1 = new File('tmp.txt')
+def i = 2
+def ext = 'htm'
+def file2 = new File("foo_${i}.${ext}")
+                        </pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <pre>
+%foo.txt &lt; 'xxx'
+%foo.txt &lt;&lt; 'yyy'
+%foo.txt &lt;&lt; 'zzz'
+                        </pre>
+                    </td>
+                    <td>
+                        <pre>
+def foo = new File('foo.txt')
+try {
+    def writer1 = new FileWriter(foo, true)
+    writer1.write('xxx')
+    def writer2 = new Filewriter(foo, false)
+    writer2.writer('yyy')
+    writer2.writer('zzz')
+} catch (IOException e) {
+    throw e;
+} finally {
+    writer.close();
+}
+                        </pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <pre>
+%foo.txt .readLine {
+    println(it)
+}
+                        </pre>
+                    </td>
+                    <td>
+                        <pre>
+def foo = new File('foo.txt')
+foo.eachLine {
+    println(it)
+}
+                        </pre>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div>
+            <h3>Matching</h3>
+        </div>
+        <table class="doc_table code_table" style="width: 100%">
+            <tbody>
+                <tr>
+                    <td>
+                        <pre>
+match var
+   |  1 | 2 | 4  -> println('number matching')
+   |  'abcd'     -> println('string matching')
+   |  1..10      -> println('range matching')
+   |  /(\d)+/    -> println('regex matching')
+   |  Person     -> println('class matching')
+   |  [1, 4, 5]  -> println('list matching')
+   |  x: 2, y: 3 -> println('map matching')
+   |  #{it > 20} -> println('closure matching')
+                        </pre>
+                    </td>
+                    <td>
+                        <pre>
+switch(var) {
+    case {it == 1 || it == 2 || it == 4}:
+        println('number matching')
+    case 'abcd':
+        println('string matching')
+    case 1..10:
+        println('range matching')
+    case /(\d)+/
+        println('regex matching')
+    case {it instaceof Person}:
+        println('class matching')
+    case [1, 4, 5]:
+        println('list matching')
+    case {x: 2, y: 3}:
+        println('map matching')
+    case {it > 20}:
+        println('closure matching')
+}
+                        </pre>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div>
+            <h3>Iterator</h3>
+        </div>
+        <table class="doc_table code_table" style="width: 100%">
+            <tbody>
+                <tr>
+                    <td>
+                        <pre>
+list.each(String s) {
+    println(s)
+}
+
+list.each(int[value: 2..&lt;30] i) {
+    println(i)
+}
+                        </pre>
+                    </td>
+                    <td>
+                        <pre>
+list.each {
+    s ->
+    if (s instanceof String) {
+        println(s)
+    }
+}
+
+list.each {
+    i ->
+    if (i instanceof Integer) {
+        if (i in 2..&lt;30) {
+            println(i)
+        }
+    }
+}
+                        </pre>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,19 @@
+class ClassA
+    a: 1
+    b: 2
+    c: 10
+
+    private text1 := 'aa'
+    public text2 := 'bb'
+    protected text3 := 'cc'
+    text4 := 'dd'
+
+init() {
+    assert a == 1
+    assert b == 2
+    assert c == 10
+    assert text1 == 'aa'
+    assert text2 == 'bb'
+    assert text3 == 'cc'
+    assert text4 == 'dd'
+}

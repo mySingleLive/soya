@@ -1,0 +1,73 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Maps -- Soya 1.0-bata</title>
+    <link type="text/css" rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="background">
+    <div>
+        <h2>集合 -- Map</h2>
+    </div>
+    <div>
+        Soya提供了简单的内置语法形式来创建Map，以下是花括号包裹的形式，{}为空Map。并且在多行形式下可以省略逗号。键值对有两种表达方式，分别是以符号 : 分割和符号 => 分割。冒号 : 左边的 Key 可以是id或引号包裹的字符串，而 => 左边的 Key 可以是变量或值。
+    </div>
+    <div class="code">
+        <pre>
+map := {a: 1, b: 2, c: 3}
+assert map.size == 3
+assert map.get('c') == 3
+assert map.b == 2
+
+// skip commas
+point := {
+   "x": 100
+   "y": 201
+   "z": 132
+}
+
+assert point.x == 100
+assert point.y == 201
+
+a := 1
+b := 'x'
+
+map2 := {
+   a => 100
+   b => 200
+   'foo' => 300
+}
+
+assert map2[1] == 100
+assert map2.foo == 300
+
+// skip { }
+map3 := a: 4, b: 5: c: 6</pre>
+    </div>
+    <div>
+        Soya还提供了基于缩进的语法方式，类似于YAML语法，在每个Map中创建的元素的前方空格必须对齐，内层Map必须比外层Map多一层缩进。
+    </div>
+    <div class="code">
+        <pre>
+person :=
+    name: 'John'
+    age:   30
+
+assert person.name == 'John'
+assert person.age == 30
+
+peter :=
+    name: 'Peter'
+    age:  24
+    father:
+        name: 'Larry'
+        age: 46
+    mother:
+        name: 'Marry'
+        age: 43
+
+marry := peter.mother
+assert marry.age == 43</pre>
+    </div>
+</div>
+</body>

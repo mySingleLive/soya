@@ -1,0 +1,222 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Regular Expression</title>
+    <link type="text/css" rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="background">
+<div>
+    <h2>正则表达式</h2>
+</div>
+<div>
+    <div>
+        正则表达式在Soya中以一种基本类型，并在语言层面提供了直接支持。和Java不同，Soya有特定的语法来表示正则匹配模式。其语法和Perl中的正则表达式类似，用两个斜杠来包裹模式的内容，并可在尾部追加一个或多个修饰符，按此语法格式定义的表达式会被解释为一个RegexPattern对象（如 /foo/）。
+    </div>
+    <div class="code">
+        <pre>
+/&lt;pattern&gt;/&lt;flags&gt;</pre>
+    </div>
+    <div>Soya同时支持用于正则匹配的运算符 =~ 和 !~ 来判断字符串对于某个正则表达式是否匹配成功。此外Soya还支持is运算符表示完整匹配，与 =~ 不同的是， =~ 判断字符串中只要含有匹配内容则返回true, 而is 判断是否整个字符串都被匹配。</div>
+    <div class="code">
+        <pre>
+import soya.lang.RegexPattern
+
+// 创建RegexPattern对象
+pattern := /abc/
+
+assert pattern is RegexPattern // pattern为RegexPattern类的对象
+
+assert 'abcdefg' =~ pattern   // 字符串中有发现abc则为匹配成功
+assert '1234567' !~ pattern   // 没有发现匹配的字符串
+
+assert '123abc456' is /(\d)+abc(\d)+/ // 是否完整匹配
+assert 'abcxyz' is not /abc/    // 没有完整匹配</pre>
+    </div>
+    <div>RegexPattern类是对java.util.regex.Pattern类进行了封装，所以Soya支持java所支持的任何匹配模式形式，下列是正则表达式中的一些常用模式。详细的正则表达式可参考Java的<a href="http://java.sun.com/j2se/1.5.0/docs/api/java/util/regex/Pattern.html">Pattern</a>文档。</div>
+    <div style="margin: 20px 0px 30px 0px;">
+        <table class="doc_table">
+            <tbody>
+                <tr>
+                    <th>元字符</th>
+                    <th>描述</th>
+                </tr>
+                <tr>
+                    <td>.</td>
+                    <td>匹配除换行符以外的所有字符。</td>
+                </tr>
+                <tr>
+                    <td>x?</td>
+                    <td>匹配 0 次或一次 x 字符串。</td>
+                </tr>
+
+                <tr>
+                    <td>x*</td>
+                    <td>匹配 0 次或多次 x 字符串，但匹配可能的最少次数。</td>
+                </tr>
+
+                <tr>
+                    <td>x+</td>
+                    <td>匹配 1 次或多次 x 字符串，但匹配可能的最少次数。</td>
+                </tr>
+
+                <tr>
+                    <td>.*</td>
+                    <td>匹配 0 次或一次的任何字符。</td>
+                </tr>
+
+                <tr>
+                    <td>.+</td>
+                    <td>匹配 1 次或多次的任何字符。</td>
+                </tr>
+
+                <tr>
+                    <td>{m}</td>
+                    <td>匹配刚好是 m 个 的指定字符串。</td>
+                </tr>
+
+                <tr>
+                    <td>{m,n}</td>
+                    <td>匹配在 m个 以上 n个 以下 的指定字符串。</td>
+                </tr>
+
+                <tr>
+                    <td>{m,}</td>
+                    <td>匹配 m个 以上 的指定字符串。</td>
+                </tr>
+
+                <tr>
+                    <td>[]</td>
+                    <td>匹配符合 [] 内的字符。</td>
+                </tr>
+
+                <tr>
+                    <td>[^]</td>
+                    <td>匹配不符合 [] 内的字符。</td>
+                </tr>
+
+                <tr>
+                    <td>[0-9]</td>
+                    <td>匹配所有数字字符。</td>
+                </tr>
+
+                <tr>
+                    <td>[a-z]</td>
+                    <td>匹配所有小写字母字符。</td>
+                </tr>
+
+                <tr>
+                    <td>^</td>
+                    <td>匹配字符开头的字符。</td>
+                </tr>
+
+                <tr>
+                    <td>$</td>
+                    <td>匹配字符结尾的字符。</td>
+                </tr>
+
+                <tr>
+                    <td>\d</td>
+                    <td>匹配一个数字的字符。等价于 [0-9]。</td>
+                </tr>
+
+                <tr>
+                    <td>\D</td>
+                    <td>匹配一个非数字字符。等价于 [^0-9]。</td>
+                </tr>
+
+                <tr>
+                    <td>\w</td>
+                    <td>匹配包括下划线的任何单词字符。等价于 [A-Za-z0-9_]。</td>
+                </tr>
+
+                <tr>
+                    <td>\w</td>
+                    <td>匹配任何非单词字符。等价于 [^A-Za-z0-9_]。</td>
+                </tr>
+
+                <tr>
+                    <td>\s</td>
+                    <td>匹配任何空白字符，包括空格、制表符、换页符等等。等价于[ \f\n\r\t\v]。</td>
+                </tr>
+
+                <tr>
+                    <td>\S</td>
+                    <td>匹配任何非空白字符。等价于[^ \f\n\r\t\v]。</td>
+                </tr>
+
+                <tr>
+                    <td>\b</td>
+                    <td>匹配以英文字母,数字为边界的字符串。</td>
+                </tr>
+
+                <tr>
+                    <td>\B</td>
+                    <td>匹配不以英文字母,数值为边界的字符串。</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div>Soya支持类似Perl中正则表达式的可选修饰符语法。Soya支持下列修饰符，其中对应的Java选项常量可参考<a href="http://java.sun.com/j2se/1.5.0/docs/api/java/util/regex/Pattern.html">Pattern</a>文档</div>
+    <div style="margin: 20px 0px 30px 0px;">
+        <table class="doc_table">
+            <tbody>
+                <tr>
+                    <th>修饰符</th>
+                    <th>Soya Flag</th>
+                    <th>Java Flag</th>
+                    <th>描述</th>
+                </tr>
+                <tr>
+                    <td>\i</td>
+                    <td>CASE_INSENSITIVE</td>
+                    <td>CASE_INSENSITIVE</td>
+                    <td>大小写不敏感</td>
+                </tr>
+                <tr>
+                    <td>\m</td>
+                    <td>MULTILINE</td>
+                    <td>MULTILINE</td>
+                    <td>多行匹配</td>
+                </tr>
+                <tr>
+                    <td>\s</td>
+                    <td>SINGLELINE</td>
+                    <td>无</td>
+                    <td>单行匹配，默认为\s</td>
+                </tr>
+                <tr>
+                    <td>\g</td>
+                    <td>GLOBAL</td>
+                    <td>无</td>
+                    <td>全局匹配</td>
+                </tr>
+                <tr>
+                    <td>\U</td>
+                    <td>UNICODE_CASE</td>
+                    <td>UNICODE_CASE</td>
+                    <td>匹配UICODE字符</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div>Soya中的正则表达式可以像Soya的字符串模板一样，用花括号括起来的部分可以是内的嵌变量和表达式，如 /foo{x}123/。</div>
+    <div class="code">
+        <pre>
+x := 'ok'
+pattern := /foo = {x}/
+assert pattern == /foo = ok/</pre>
+    </div>
+    <div>其中需要注意的是{ }中内容为纯数字的字符的时候，它依然为正则表达式中的匹配n个字符意思。而当{ }中除了数字还有其它字符（包括 + - * / 等）时，它便作为表达式来处理。</div>
+    <div class="code">
+        <pre>
+pattern := /foo{2}/
+aasert "foofoo" =~ pattern // 匹配foo两次
+
+pattern = /foo{2 + 1}/
+assert "foo3" =~ pattern  // 匹配"foo3"</pre>
+    </div>
+</div>
+</div>
+</body>
+</html>

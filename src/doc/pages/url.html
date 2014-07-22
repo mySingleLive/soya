@@ -1,0 +1,36 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>URL</title>
+    <link type="text/css" rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="background">
+        <div>
+            <h2>URL</h2>
+        </div>
+        <div>
+            URL在Soya中为基本类型，本提供了字面量语法。
+        </div>
+        <div class="code">
+            <pre>
+address := http://www.abc.com:80/path?name=x&amp;value=12
+assert address.protocol == 'http'
+assert address.host == 'www.abc.com'
+assert address.port == 80
+assert address.path == '/path'
+assert address.query == 'name=x&amp;value=12'
+assert address.parameters.name == 'x'
+assert address.parameters.value == '12'</pre>
+        </div>
+        <div>
+            要注意的是，在访问URL对象的属性和方法时，不能直接在其字面量后面使用 . 操作符，比如 http://www.yahoo.com.toString() 中的 .toString() 会被认为是URL地址的一部分。所以这时需要插入一个空格，或用空格包裹URL部分
+        </div>
+        <div class="code">
+            <pre>
+http://www.yahoo.com .toString()
+(http://www.yahoo.com).toString()</pre>
+        </div>
+    </div>
+</body>
+</html>

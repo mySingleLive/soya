@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+if [ -n "$JAVA_HOME" -a -x "$JAVA_HOME/bin/java" ]; then
+    JAVA_EXEC=$JAVA_HOME/bin/java
+else
+    JAVA_EXEC="java"
+fi
+
+SOYA_JAR="soya.jar"
+CP=$CLASSPATH
+
+if [ -n "SOYA_HOME" -a `expr "SOYA_HOME":'\/$'`  ]; then
+    SOYA_HOME=`echo $SOYA_HOME | sed -e 's/\/$//'`
+fi
+
+if [ -z "SOYA_HOME" ]; then
+    SOYA_HOME="."
+fi
+
+SOYA_CLASSPATH="$SOYA_HOME/libs/$SOYA_JAR"
+
+CP="$CP:$SOYA_CLASSPATH"
+
+
+SOYA_MAIN_CLASS=org.soya.tools.Main
+
+
+exec "$JAVA_EXEC" -classpath $CP -Dsoya.home="$JAVA_HOME" $SOYA_MAIN_CLASS "$@"
+

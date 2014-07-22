@@ -1,0 +1,382 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Operators -- Soya 1.0-bata</title>
+    <link type="text/css" rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="background">
+    <div>
+        <h2>操作符</h2>
+    </div>
+    <div>
+        <h3>数字</h3>
+    </div>
+    <div>
+        基本数学操作符
+    </div>
+    <div class="code">
+        <pre>
+assert 3 + 2 == 5   // addition
+assert 9 - 3 == 6   // subtraction
+assert 7 * 3 == 21  // multiplication
+assert 4 / 2 == 2   // division</pre>
+    </div>
+    <div>
+        求余操作同Java一样使用 % 符号
+    </div>
+    <div class="code">
+        <pre>
+assert 4 % 2 == 0
+assert 10 % 3 == 1</pre>
+    </div>
+    <div>
+        在Soya中，** 和 ^ 一样都都用于幂运算
+    </div>
+    <div class="code">
+        <pre>
+assert 4 ^ 2 == 16
+assert 3 ** 3 == 27</pre>
+    </div>
+    <div>
+        自增和自减。注意：在Soya中不支持前置 ++ 和 --
+    </div>
+    <div class="code">
+        <pre>
+a := 10
+b := 18
+a++    // increment
+assert a == 1
+b--    // decrement
+assert b == 17
+
+a = 16
+b = a++
+assert b == 16
+assert a == 17
+</pre>
+    </div>
+    <div>
+        按位运算
+    </div>
+    <div class="code">
+        <pre>
+assert (11 .&amp;. 7) == 3     // bitwise and
+assert (6 .|. 8) == 14     // bitwise or
+assert (4 .&lt;&lt;. 1) == 8     // bitwise shift left
+assert (18 .&gt;&gt;. 2) == 4    // bitwise shift right</pre>
+    </div>
+    <div>
+        Soya使用关键字"xor"来进行异或操作
+    </div>
+    <div class="code">
+        <pre>
+assert (true xor true) == false
+assert (false xor false) == false
+assert (true xor false) == true
+assert (1 xor 1) == 0
+assert (1 xor 0) == 1
+assert (7 xor 8) == 15</pre>
+    </div>
+    <div>
+        <h3>比较</h3>
+    </div>
+    <div>
+        精确相等。与Java中的 == 只能对值比较不同，Soya中的相等比较是对两者内容的精确比较。
+    </div>
+    <div class="code">
+        <pre>
+assert 4 + 2 == 6
+assert 'foo' + '123' == 'foo123'
+
+assert 'abc' != '321'</pre>
+    </div>
+    <div>
+        匹配相等。对两者进行模式匹配比较。
+    </div>
+    <div class="code">
+        <pre>
+assert 2 + 3 is 5
+assert 43 is Integer
+assert 'abc' is /(\w)+/
+assert 6 is 1..10
+
+assert 3 is not '3'
+assert ['a', 'b'] is not Empty</pre>
+    </div>
+    <div>
+        大于/小于
+    </div>
+    <div class="code">
+        <pre>
+assert 4 &gt; 2
+assert 9 &lt; 20
+assert 10 &gt;= 2
+assert 10 &gt;= 10
+assert 3 &lt;= 9
+assert 3 &lt;= 3</pre>
+    </div>
+    <div>
+        <h3>逻辑</h3>
+    </div>
+    <div>
+        基本逻辑运算
+    </div>
+    <div class="code">
+        <pre>
+assert (true &amp;&amp; false) == false
+assert (true &amp;&amp; true) == true
+assert (false || false) == false
+assert (false || true) == true
+assert !false</pre>
+    </div>
+    <div>
+        异或。既可以对整数类型进行按位异或操作，也可以对Boolean类型进行逻辑上的异或操作。
+    </div>
+    <div class="code">
+        <pre>
+assert (true xor false) == true
+assert (false xor true) == true
+assert (true xor true) == false
+assert (false xor false) == false</pre>
+    </div>
+    <div>
+        条件
+    </div>
+    <div class="code">
+        <pre>
+a := 2
+assert a > 1 ? true : false
+
+a = null
+assert a ? false : true</pre>
+    </div>
+    <div>
+        <h3>模式</h3>
+    </div>
+    <div>
+        模式的与和或使用 &amp; 和 | , 其运算结果是产生一个 priam.util.pattern.And 和 soya.util.pattern.Or 类的对象
+    </div>
+    <div class="code">
+        <pre>
+o1 := Integer &amp; 2
+assert o1 instanceof AndPattern
+
+o2 = String | List
+assert o2 instanceof OrPattern</pre>
+    </div>
+    <div>
+        &amp; 和 | 可以组成较复杂的模式结构，来进行复合模式匹配
+    </div>
+    <div class="code">
+        <pre>
+assert 1 is (-10..&lt;2 &amp; 1..10)
+assert 'x' is (String &amp; ('x' | /\d/))</pre>
+    </div>
+    <div>
+        <h3>列表</h3>
+    </div>
+    <div>列表相连</div>
+    <div class="code">
+        <pre>
+list1 := [1, 2, 3]
+list2 := ['a', 'b', 'c']
+assert list1 + list2 == [1, 2, 3, 'a', 'b', 'c']</pre>
+    </div>
+    <div>
+        当 * 右边是整数时，则重复列表内容
+    </div>
+    <div class="code">
+        <pre>
+list := [1, 3]
+assert list * 3 == [1, 3, 1, 3, 1, 3]</pre>
+    </div>
+    <div>
+        当 * 右边是字符串时，则意义与 join 相同
+    </div>
+    <div class="code">
+        <pre>
+list := ['a', 'b']
+assert list * " + " == "a + b"</pre>
+    </div>
+    <div>
+        <h3>字符串</h3>
+    </div>
+    <div>
+        字符串相连
+    </div>
+    <div class="code">
+        <pre>
+assert "My name is" + ' ' + 'Peter' == 'My name is Peter'</pre>
+    </div>
+    <div>
+        当 * 右边是整数时，则重复字符串内容
+    </div>
+    <div class="code">
+        <pre>
+assert 'ab' * 3 == 'ababab'</pre>
+    </div>
+    <div>
+        除法与 split 的意义相同
+    </div>
+    <div class="code">
+        <pre>
+a := 'message is ok'
+assert a / ' ' == ['message', 'is', 'ok']</pre>
+    </div>
+    <div>
+        需要添加元素时可以使用 &lt;&lt; 和 >>
+    </div>
+    <div class="code">
+        <pre>
+list := [1, 2, 3]
+list &lt;&lt; 'a'
+assert list == [1, 2, 3, 'a']
+'b' >> list
+assert list == [1, 2, 3, 'a', 'b']</pre>
+    </div>
+    <div>
+        <h3>映射表</h3>
+    </div>
+    <div>
+        映射表的合并
+    </div>
+    <div class="code">
+        <pre>
+table1 := a: 2, b: 4
+table2 := c: 5, d: 8
+assert table1 + table2 == a: 2, b: 4, c: 5, d: 8</pre>
+    </div>
+    <div>
+        &lt;&lt; 和 >> 同样可用于映射表的合并
+    </div>
+    <div class="code">
+        <pre>
+table := a: 1, b: 2
+table &lt;&lt; a: 3, c: 5, d: 7
+assert table == a: 3, b: 2, c: 5, d: 7
+(value: 'ok') >> table
+assert table == a: 3, b: 2, c: 5, d: 7, value: 'ok'</pre>
+    </div>
+    <div>
+        <h3>正则表达式</h3>
+    </div>
+    <div>
+        正则模式匹配。Soya支持类似Perl语言中处理正则匹配的 =~ 和 !~
+    </div>
+    <div class="code">
+        <pre>
+assert 'abc123k' =~ /(\w)+(\d)/
+assert 'name' !~ /(\d)+/</pre>
+    </div>
+    <div>
+        同时也可以使用 is 进行正则匹配。但需要注意的是 is 处理的是严格的全字符串匹配， 而 =~ 只要匹配字符串中的一部分
+    </div>
+    <div class="code">
+        <pre>
+str := 'abc567xyz'
+assert str is /[a-z]+(\d)+[a-z]+/
+assert str is not /(\d)+(\w)+/</pre>
+    </div>
+    <div>
+        <h3>时间和日期</h3>
+    </div>
+    <div>
+        日期和时间的加减法。需要注意的是日期不能与日期相加。
+    </div>
+    <div class="code">
+        <pre>
+assert 2011/3/4 - 2011/3/2 == 48:00
+assert 2005/5/6 - 12:05 == 2005/5/5 11:55
+assert 2009/7/2 + 10:20 == 2009/7/2 10:20
+assert 20:23 - 2:03 == 18:20
+assert 09:03 + 01:07 == 10:10
+assert 2008/5/6 3:00 + 48:30 == 2008/5/7 3:30</pre>
+    </div>
+    <div>
+        时间的乘法和除法
+    </div>
+    <div class="code">
+        <pre>
+assert 12:20 / 2 == 6:10
+assert 4:12 * 3 == 12:36
+assert 40:00 / 20:00 == 2</pre>
+    </div>
+    <div>
+        <h3>文件</h3>
+    </div>
+    <div>
+        文件路径的合并。当 + 的右边是字符串时只是单纯地在文件路径后追加字符串从而获得新的文件对象。而当 + 的右边同样是文件对象时则是获得右边作为左边下级目录内容的新文件对象。
+    </div>
+    <div class="code">
+        <pre>
+assert %xx + 'foo.txt' == %xxfoo.txt
+assert %xx + %yy + %foo.txt == %xx/yy/foo.txt</pre>
+    </div>
+    <div>
+        &lt;&lt; 和 >> 用于追加文件内容， 并且当文件不存在时会创建一个新文件
+    </div>
+    <div class="code">
+        <pre>
+file := %foo.txt
+file  &lt;&lt; 'abc\n'
+file  &lt;&lt; '123\n'
+assert file.read == 'abc\n123\n'
+'xyz' >> file
+assert file.read == 'abc\n123\nxyz'</pre>
+    </div>
+    <div>
+        &lt; 和 > 用于覆盖旧的文件内容。如果文件不存在则会先创建新文件再添加内容
+    </div>
+    <div class="code">
+        <pre>
+file := %foo.txt
+file &lt; '123'
+assert file.read == '123'
+
+file &lt; 'abc'
+assert file.read == 'abc'
+
+' ' > file
+assert file.read == ' '</pre>
+    </div>
+    <div>
+        <h3>URL</h3>
+    </div>
+    <div>
+        URL地址的合并。当 + 的右边是字符串时则直接在地址后追加字符串内容。当 + 右边是文件对象时则是在URL的Path后追加下一级路径名
+    </div>
+    <div class="code">
+        <pre>
+url := http://www.abc.com
+url += '?x=0'
+assert url == http://www.abc.com?x=0
+
+assert url + %index.html == http://www.abc.com/index.html?x=0</pre>
+    </div>
+    <div>
+        <h3>对象</h3>
+    </div>
+    <div>
+        创建对象实例
+    </div>
+    <div class="code">
+        <pre>
+array := new ArrayList()
+map := new HashMap()</pre>
+    </div>
+    <div>
+        类型匹配，Soya中的 instanceof 支持复合类型匹配
+    </div>
+    <div class="code">
+        <pre>
+date := new Date()
+assert date instanceof Date
+
+assert 2 instanceof Integer
+assert 2.3 instanceof Float[value: 0..10]
+assert /abc/ instanceof [RegexPattern, Object, Integer] // meet any clsses in the list</pre>
+    </div>
+</div>
+</body>
+</html>

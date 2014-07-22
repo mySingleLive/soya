@@ -1,0 +1,62 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Control Structures</title>
+    <link type="text/css" rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="background">
+    <div>
+        <h2>集合 -- List</h2>
+    </div>
+    <div>
+        Soya提供了简单的内置语法形式来创建List，以下是方括号包裹的方式，[]为空List
+    </div>
+    <div class="code">
+        <pre>
+list := [1, 2, 3, 4, 5]
+assert list.size == 5
+assert list.get(1) == 2
+assert list[2] == [3]
+assert list.first == 1
+
+emptyList := []
+assert emptyList.size == 0
+emptyList.add(2)
+assert emptyList == [2]</pre>
+    </div>
+    <div>
+        Soya还提供了基于缩进的语法方式，类似于YAML语法，在每个List中创建的元素的前方空格必须对齐，而且必须以'*'符号标注。
+    </div>
+    <div class="code">
+        <pre>
+nums :=
+   * 10
+   * 20
+   * 40
+   * 80
+
+assert nums.size == 4
+assert nums[2] == 40
+
+names :=
+   * 'A'
+   * 'B'
+   * 'C'
+
+assert names[1] == 'B'
+
+persons :=
+   * name: 'Pater'
+     age:  24
+   * name: 'Marry'
+     age:  21
+   * name: 'John'
+     age:  30
+
+person := person[2]
+assert person.name == 'John'
+assert person.age == 30</pre>
+    </div>
+</div>
+</body>

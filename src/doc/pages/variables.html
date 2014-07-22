@@ -1,0 +1,41 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Variables -- Soya 1.0-bata</title>
+    <link type="text/css" rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="background">
+        <div>
+            <h2>变量</h2>
+        </div>
+        <div>
+             <h3>变量的声明</h3>
+        </div>
+        <div>在Soya中，声明变量非常简单，只要使用 variable := value 的形式给一个变量名赋予初值即可</div>
+        <div class="code">
+            <pre>
+a := 12
+b := 'abc'
+c := 2009-3-4</pre>
+        </div>
+        <div>
+            除此，还有使用模式的别名方式在定义变量，其作用域只在其所在语句范围内
+        </div>
+        <div class="code">
+            <pre>
+[1, 3, 5, 6].each(int i) {
+    println(i)
+}</pre>
+        </div>
+        <div>
+            声明定义变量时有一下几点需要注意：
+            <ul>
+                <li>使用 := 声明变量时必须给予初值</li>
+                <li>在同一作用域中可以与类名、方法名、属性名重名</li>
+                <li>在同一作用域中变量不能与其它变量重名</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

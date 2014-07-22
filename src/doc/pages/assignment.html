@@ -1,0 +1,44 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Assignment -- Soya 1.0-bata</title>
+    <link type="text/css" rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="background">
+        <div>
+            <h2>赋值</h2>
+        </div>
+        <div>
+            您可以如同其他主流程序语言一样，使用 variable = value 的形式进行赋值。也同其他大多数语言一样，必须在变量声明之后进行赋值。 在Soya中同一个变量可以被赋予不同类型的值
+        </div>
+        <div class="code">
+            <pre>
+a := 2
+a = 4
+a = 'xx'</pre>
+        </div>
+        <div>
+            if-else, match 都可以作为表达式用于赋值
+        </div>
+        <div class="code">
+            <pre>
+a := 0
+a = if (a > 0) {
+    -1
+}
+else {
+    1
+}
+assert a == 1
+
+a = match 2
+   | -100..0 -> 1
+   | 0..3    -> 2
+   | 3>..    -> 3
+
+assert a == 2</pre>
+        </div>
+    </div>
+</body>
+</html>

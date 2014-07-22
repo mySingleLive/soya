@@ -1,0 +1,1085 @@
+
+#! /usr/bin/env soya
+
+/*
+ **************************************************************************
+ *  The script is used for testing Soya language.
+ *  When the code of Soya is changed, you can run the script
+ *  so that you make sure it can work.
+ *  author: Jun Gong, gongjun_dt@yahoo.com
+ **************************************************************************
+ */
+
+currentTest := ''
+testCount := 0
+
+def startTest(name) {
+   currentTest = name
+   testCount++
+   println("test {testCount}\t: {currentTest}")
+}
+
+// test assginment
+
+startTest('assignment')
+
+a := []
+a[0] = "foo"
+assert a[0] == "foo"
+
+b := {}
+b["a"] = "foo"
+assert b['a'] == "foo"
+
+n1 := 5
+n1 = 12
+assert n1 == 12
+n2 := 12
+assert n1 == 12
+n3 := 5
+n3 += 22
+assert n3 == 27
+n4 := 6
+n4 -= 10
+assert n4 == -4
+n5 := 5
+n5 *= 3
+assert n5 == 15
+n6 := 8
+n6 /= 4
+assert n6 == 2
+
+a = null; assert a == null
+a = 10; assert a == 10
+a = []; assert a == []
+a = [3]; assert a == [3]
+a = [null]; assert a == [null]
+a = [[]]; assert a == [[]]
+a = [2, 4]; assert a == [2, 4]
+a = [_]; assert a == [_]
+
+a = [1, 2, 3, 4, 5]
+a[1, 3] = 0
+assert a == [1, 0, 0, 0, 5]
+
+a = [3, 4, 5, 6, 7]
+a[Index[value: 2..]] = 0
+assert a == [3, 4, 0, 0, 0]
+
+a = ['a', 2, 'b', 6, 8]
+a[String s] = s + '!'
+assert a == ['a!', 2, 'b!', 6, 8]
+
+a = [1, 2, 3, 4, 5]
+a[Index i] = i
+assert a == [0, 1, 2, 3, 4]
+
+a = ['x', 4, 'y', 5, 'z']
+a[Index[value: 2..] as i] = i
+assert a == ['x', 4, 2, 3, 4]
+
+a = [3, 4, 6, 7]
+a.each = 0
+assert a == [0, 0, 0, 0]
+
+a = [4, 5, 6]
+a.each(Index i) = i + 1
+assert a == [1, 2, 3]
+
+a = [1, 2, 3, 4, 5]
+a.each(Index[value: 2..]) = 0
+assert a == [1, 2, 0, 0, 0]
+
+
+a = [3, 6, 'x', 'y', 9]
+a.each(String) = 'aa'
+assert a == [3, 6, 'aa', 'aa', 9]
+
+a = [3, 5, 'a', 'b', 3, 'f']
+a.each(String s, Index i) = s + i
+assert a == [3, 5, 'a2', 'b3', 3, 'f5']
+a.each(String s, Index[value: 2 | 5] i) = s + i
+assert a == [3, 5, 'a22', 'b3', 3, 'f55']
+
+a = ['a', 4, 'k', 6]
+a.each(_ x, Index i) = x + (i + 1)
+assert a == ['a1', 6, 'k3', 10]
+
+
+startTest('number')
+
+assert 10.1 > 10
+assert 0.3 < 0.31
+assert 2.3 >= 2.3
+assert 1 <= 1.2
+assert 101 == 101
+assert 3.30 == 3.30
+
+assert 10 - 0.1 == 9.9
+assert 9 + 0.1 == 9.1
+assert 5 * 2 == 10
+assert 10 * 0.5 == 5
+assert 22 / 10 == 2.2
+assert 20 / 0.2 == 100
+assert 0.1 + 0.9 == 1
+assert 9.9 + 1 == 10.9
+assert 2.34 - 0.34 == 2
+assert 3.18 - 3 == 0.18
+assert 0.2 * 3 == 0.6
+assert 0.3 * 0.1 == 0.03
+assert 0.2 / 10 == 0.02
+assert 0.2 / 0.1 == 2
+assert 3 ^ 3 == 27
+assert 4 ** 2 == 16
+assert 5 % 2 == 1
+assert (11 .&. 7) == 3
+assert (6 .|. 8) == 14
+assert (4 .<<. 1) == 8
+assert (18 .>>. 2) == 4
+assert (1 xor 0) == 1
+assert (1 xor 1) == 0
+
+a = 10
+a++
+assert a == 11
+a = 17
+a--
+assert a == 16
+b = a++
+assert b == 16
+assert a == 17
+
+startTest('condition')
+
+x := '0'
+
+assert x == x && true
+assert x == x || false
+assert x != x || true
+
+assert true xor false == true
+assert false xor true == true
+assert true xor true == false
+assert false xor false == false
+
+startTest('if-else')
+
+x = 'ok'
+assert if (x == 'ok') {true} else {false}
+
+if (x != 'ok') {
+   assert false
+}
+else {
+   assert true
+}
+
+str := if (x == "ok") {"work"} else {"not work"}
+assert str == 'work'
+
+// if-else in argument
+def testIfArg(arg, ret) {
+    assert arg == ret
+}
+
+x = 0
+testIfArg(if (x == 0) {1} else {-1}, 1)
+
+// if-else as expression
+y := if (x == 0) {10} else {20} + 1
+assert y == 11
+
+assert if (x == 0) {'aaaa'} else {'a'}.length == 4
+
+startTest('match')
+
+match(0)
+  | Integer -> assert true
+  | _ -> assert false
+
+5 match
+  | 1 | 2 | 3 | 4 | 6 | 7 -> assert false
+  | 5 -> assert true
+
+5 match
+  | 5 -> assert true
+  | _ -> assert false
+
+5 match
+  | int -> assert true
+  | _ -> assert false
+
+5 match
+  | Integer -> assert true
+  | _ -> assert false
+
+5 match
+  | 1..10 -> assert true
+  | _ -> assert false
+
+'foo' match
+  | String -> assert true
+  | _ -> assert false
+
+'foo' match
+  | /^f.*o$/g -> assert true
+  | _ -> assert false
+
+[] match
+  | [] -> assert true
+  | _ -> assert false
+
+a = [1, 3, 5]
+a match
+  | [1, 3, 5] -> assert true
+  | _ -> assert false
+
+a match
+  | List[first: _ f] -> assert f == 1
+  | _ -> assert false
+
+a match
+  | List[tail: List t] -> assert t == [3, 5]
+  | _ -> assert false
+
+a = {}
+a match
+  | {} -> assert true
+  | _ -> assert false
+
+a = {a: 1, b: 2}
+a match
+  | {a: 1, b: 2} -> assert true
+  | _ -> assert false
+
+a match
+  | Map[size: 2] -> assert true
+  | _ -> assert false
+
+a match
+  | Map[a: 1, b: 2] -> assert true
+  | _ -> assert false
+
+a match
+  | Map[b: 1..5] -> assert true
+  | _ -> assert false
+
+
+startTest('loop')
+
+sum := 0
+
+for (i in 1..10) {
+   sum += i
+}
+
+assert sum == 55
+
+sum = 0
+
+for (i in 1>..10) {
+   assert i != 1
+   sum += i
+}
+
+assert sum == 54
+
+sum = 0
+
+for (i in 1>..<10) {
+   assert i != 1
+   assert i != 10
+   sum += i
+}
+
+assert sum == 44
+
+a = [2, 3, 4, 5, 6]
+sum = 0
+for (n in a) {
+   sum += n
+}
+assert sum == 20
+
+a = {a: 1, b: 4, x: 6}
+x = []
+for (key in a) {
+    x << key
+}
+assert x.join =~ /(abx|axb|bxa|bax)/
+
+for (sum > 10) {
+   sum--
+}
+
+assert sum == 10
+
+for (i := 0; i < sum; i++) {
+   sum++
+   if (i >= 5) {
+      break
+   }
+}
+
+assert sum == 16
+
+
+startTest('exception')
+
+x = false
+
+try {
+  throw new java.lang.Exception('exception')
+  assert false
+} catch(e) {
+  assert true
+  x = true
+}
+
+assert x
+
+try {
+   try {
+       throw new java.lang.Exception('exception')
+       assert false
+   } catch(e1) {
+       throw e1
+   }
+   assert false
+} catch(e2) {
+   assert true
+}
+
+
+try {
+   throw new java.lang.Exception('ABC')
+} catch(e) {
+   e match
+      | java.lang.Exception[message: 'ABC'] -> assert true
+      | _ -> assert false
+}
+
+
+startTest('range')
+
+range := 1..10
+assert range.size == 10
+
+range = 2>..8
+assert range.size == 6
+
+range = 2..<8
+assert range.size == 6
+
+range = 4>..<10
+assert range.size == 5
+
+// match
+
+assert 3 is 1..10
+assert 4 is 3>..9
+assert 5 is not 1..<5
+
+// get
+
+range = 2..9
+assert range.get(1) == 3
+assert range[1] == 3
+assert range[2, 5] == [4, 5, 6, 7]
+assert range[2, -2] == [4, 5, 6, 7, 8]
+
+range = 3>..10
+assert range.get(0) == 4
+assert range[2] == 6
+assert range[-1] == 10
+assert range[1, 3] == [5, 6, 7]
+
+range = 4..<9
+assert range[-1] == 8
+assert range[-3] == 6
+
+// contains
+
+range = 3..<9
+assert range.contains(5)
+assert !range.contains(9)
+
+range = 5>..10
+assert range.contains(10)
+assert !range.contains(5)
+
+// toArray
+
+range = 3>..10
+assert range.toArray == [4, 5, 6, 7, 8, 9, 10]
+
+range = 4>..<10
+assert range.toArray == [5, 6, 7, 8, 9]
+
+range = 3..5
+assert range.toArray.join == "345"
+
+// each
+
+range = 4..16
+range.each {
+   assert it is 4..16
+}
+
+
+range.each(Index i) {
+   assert range.get(i) == it
+}
+
+range.each(_ ri, Index i) {
+   assert range.get(i) == ri
+}
+
+startTest('list')
+
+a = [1, 2]
+b = [3, 4]
+assert a + b == [1, 2, 3, 4]
+assert a * 2 == [1, 2, 1, 2]
+assert b * 3 == [3, 4, 3, 4, 3, 4]
+assert a * ';' == '1;2'
+
+// get
+assert a.get(1) == 2
+assert a[1] == 2
+
+a = [1, 2, 3, 4, 5, 6]
+assert a[1..3] == [1, 2, 3]
+assert a[1, 3] == [2, 3, 4]
+assert a[1, 100] == [2, 3, 4, 5, 6]
+assert a[3, _] == [4, 5, 6]
+assert a[_, 2] == [1, 2, 3]
+assert a[3, int[value: 5..]] == [5, 6]
+assert a[int[value: 2..], 2] == [2, 3]
+assert a[a.size - 1] == 6
+assert a[-1] == 6
+assert a[2, -2] == [3, 4, 5]
+assert a[-5, -1] == [2, 3, 4, 5, 6]
+assert a[-1, -5] == [6]
+assert a[_, -3] == [1, 2, 3, 4]
+
+// first, last, tail
+assert a.first == 1
+assert a.last == 6
+assert a.tail == [2, 3, 4, 5, 6]
+
+// pop
+x = a.pop
+assert x == 6
+assert a == [1, 2, 3, 4, 5]
+
+// compact
+a = [null, null, 1, null, 3, null, null]
+a = a.compact
+assert a == [1, 3]
+
+// uniq
+a = [1, 1, 2, 4, 5, 4, 2, 1]
+a = a.uniq
+assert a == [1, 2, 4, 5]
+
+// empty
+assert !a.isEmpty
+assert a is not Empty
+x = []
+assert x.isEmpty
+assert x is Empty
+
+// sort
+a = [2, 5, 3, 6, 8, 9, 1]
+a = a.sort
+assert a == [1, 2, 3, 5, 6, 8, 9]
+
+x = ['fe', 'ek', 'vks', 'oew', 'ysk', '...']
+x = x.sort.join(' ')
+assert x == '... ek fe oew vks ysk'
+
+// sort width condition
+a = [3, 6, 4, 8, 1]
+x = a.sort(#(a, b) {a < b})
+assert x == [1, 3, 4, 6, 8]
+x = a.sort(#(a, b) {a > b})
+assert x == [8, 6, 4, 3, 1]
+
+
+// reverse
+a = ['a', 12, 'b', 'c']
+a = a.reverse
+assert a == ['c', 'b', 12, 'a']
+
+// indexOf
+x = a.indexOf('b')
+assert x == 1
+
+// remove
+x = a.removeAt(0)
+assert x == 'c'
+assert a == ['b', 12, 'a']
+
+a.remove(12)
+assert a == ['b', 'a']
+
+// lastIndexOf
+b = [2, 4, 7, 5, 2, 4]
+x = b.lastIndexOf(2)
+assert x == 4
+
+// collect
+a = [2, 4, 6, 'a', 3, 't']
+assert a.collect(#(x) {x + 1}) == [3, 5, 7, 'a1', 4, 't1']
+
+// find
+assert a[Integer] == [2, 4, 6, 3]
+assert a.find(String) == ['a', 't']
+
+a = [2, 6, 'abc', 54, 'fgh', 34]
+assert a.find(/ab.*/ | (int & 30..)) == ['abc', 54, 34]
+assert a.find(#(x) {x > 50}) == [54]
+def gt54 (x) {x > 30}
+assert a.find(#gt54) == [54, 34]
+assert a.find {it <= 6} == [2, 6]
+
+// each
+a = [3, 4, 'ok', 67, 'no', 3, 23, 5]
+b = []
+a.each {
+   if (it > 10) {
+      b << it
+   }
+}
+
+assert b == [67, 23]
+
+b = []
+a.each(String) {
+  b << it
+}
+
+assert b == ['ok', 'no']
+
+b = []
+a.each(#gt54) {
+   b << it
+}
+assert b == [67]
+
+
+
+b = []
+a.each(String s, Index i) {
+   b << s + i
+}
+
+assert b == ['ok2', 'no4']
+
+a =
+  * id: 3
+    name: 'Gdx'
+  * id: 8
+    name: 'Fds'
+  * id: 1
+    name: 'Pfe'
+  * id: 4
+    name: 'Hft'
+
+a.sortBy('id')
+
+assert a*.id == [1, 3, 4, 8]
+assert a*.name == ['Pfe', 'Gdx', 'Hft', 'Fds']
+
+a =
+  * id: 3
+    name: 'Gdx'
+  * id: 8
+    name: 'Fds'
+  * name: 'Ytr'
+  * id: 1
+    name: 'Pfe'
+  * id: 4
+    name: 'Hft'
+  * name: 'Huf'
+
+
+a.sortBy('id')
+
+assert a*.id == [1, 3, 4, 8, null, null]
+assert a*.size() == [2, 2, 2, 2, 1, 1]
+assert a*.name == ['Pfe', 'Gdx', 'Hft', 'Fds', 'Ytr', 'Huf']
+
+
+// yaml-like expression
+a =
+  * 'John'
+  * 'Peter'
+  * 'Marry'
+  * 'Steve'
+
+assert a == ['John', 'Peter', 'Marry', 'Steve']
+
+startTest('map')
+
+a = {"x": 21, "y": 20}
+
+assert a['x'] == 21
+
+noCommar := {
+    a: 321
+    b: 103
+    c: 938
+}
+
+assert noCommar.a == 321
+
+a = a: 1, b: 2
+b = c: 4, d: 8
+assert a + b == a: 1, b: 2, c: 4, d: 8
+
+a = {1 => 3, 2 => 6, 3 => 9}
+b = {a: 10, b: 20}
+x = "a"
+assert a[2] == 6
+assert b == {"a": 10, "b": 20}
+//assert b == {"{x}" => 10, "b" => 20}
+assert b == {b: 40 / 2, a: 5 * 2}
+assert b == {'a' => 10, 'b' => 20}
+assert a + b == {1 => 3, 2 => 6, 3 => 9, 'a' => 10, 'b' => 20}
+
+a << b
+assert a == {1 => 3, 2 => 6, 3 => 9, 'a' => 10, 'b' => 20}
+
+b = {value: 'ok'}
+(value: 'ok') >> a
+assert a == {1 => 3, 2 => 6, 3 => 9, 'a' => 10, 'b' => 20, 'value' => 'ok'}
+
+
+// empty
+assert !a.isEmpty
+a = {}
+assert a.isEmpty
+
+a = {name: 'Peter', age: 24, id: 32}
+
+// get
+
+assert a['name'] == 'Peter'
+x = 'age'
+assert a["{x}"] == 24
+
+// each
+
+a.each(Key key) {
+    assert a[key] == it
+}
+
+a.each(Key key, _ o) {
+    assert a[key] == o
+}
+
+a.each(int n) {
+    assert n is (24 | 32)
+}
+
+a.each(Key key, String s) {
+    assert s == 'Peter'
+}
+
+a.each(_ o, Key key) {
+    assert a[key] == o
+}
+
+
+// contains key
+
+assert a.containsKey('age')
+
+// contains value
+
+assert a.containsValue('Peter')
+
+assert a.values.contains(32)
+
+
+startTest('existence')
+
+a = null
+assert a ? false : true
+
+
+startTest('string')
+
+a = 'abc'
+b = '123'
+assert a + b == "abc123"
+assert a + b == "abc{b}"
+
+assert '''abcd''' == 'abcd'
+assert """abcd""" == 'abcd'
+
+// multiplication
+a = 'ab'
+assert a * 3 == 'ababab'
+
+// division
+a = 'message is ok'
+assert a / ' ' == ['message', 'is', 'ok']
+assert a / ' ' * ' ' == a
+
+// get
+a = 'a1j3k4i6'
+assert a[2] == 'j'
+assert a[2, 4] == 'j3k'
+assert a[/\w3/] == 'j3'
+assert a[/\d/] == '1'
+assert a[/\d/g] == ['1', '3', '4', '6']
+
+assert a[3, 5] == '3k4'
+assert a[5, a.length - 1] == '4i6'
+assert a[5, _] == '4i6'
+assert a[_, 2] == 'a1j'
+assert a[2, /\d/] == ['3', '4', '6']
+assert a[/\D/, 5] == ['a', 'j', 'k']
+
+// split
+a = "He is the one"
+assert a.split(/\s/).reverse.join(" ") == "one the is He"
+
+// replace
+a = "abc 123cd xyz abcde34f"
+x = a.replace('abc', '***')
+assert x == '*** 123cd xyz ***de34f'
+
+x = a.replace(/(\d)+[a-z]/, '00')
+assert x == 'abc 00d xyz abcde00'
+
+// indexOf
+a = '456abc123abc'
+x = a.indexOf(/abc/)
+assert x == 3
+
+x = a.indexOf(/abc/, 5)
+assert x == 9
+
+// multiline
+
+x = """
+  first line
+  second line
+"""
+
+y = '''
+  first line
+  second line
+'''
+
+assert x == y
+
+x = '
+1 line
+2 line
+'
+assert x == '1 line2 line'
+
+a = 32
+
+x = """
+a is {a}
+"""
+
+assert x == "\na is 32\n"
+
+x = '''
+a is {a}
+'''
+
+assert x == "\na is \{a}\n"
+
+startTest('regex')
+
+a = /abc/g
+assert a.isGlobal
+assert !a.isCaseInsensitive
+assert !a.isMultiline
+
+x = 'abcdedbc'.find(/bc/)
+assert x == 'bc'
+
+x = 'abcdabc32abca'.find(/bc\w/g)
+assert x == ['bcd', 'bc3', 'bca']
+
+a = /\d\w.+/igm
+assert a.isCaseInsensitive
+assert a.isGlobal
+assert a.isMultiline
+
+a = /ab/i
+assert '32Abc' =~ a
+assert '3232ba' !~ a
+assert 'abcd' is not a
+
+i := 0
+x = 'it is abc, not bcd'
+'abc' =~ /bc/g
+for (x =~ /bc/g) {
+    i++
+}
+assert i == 2
+assert x =~ /bc/g
+
+x = 'ok'
+a = /{x}!/ig
+assert 'OK!' =~ a
+assert 'OK!' !~ a
+
+a = /foo = {x}/
+assert a == /foo = ok/
+
+x = "abcd\na1234\nbcda"
+assert x.find(/^a(.)+/gm) == ["abcd", "a1234"]
+
+// date
+
+startTest('date')
+
+a = 2000/3/1
+assert a.year == 2000
+assert a.month == 3
+assert a.day == 1
+
+a = 2001-4-2
+assert a.year == 2001
+assert a.month == 4
+assert a.day == 2
+
+a = 2002\5\3
+assert a.year == 2002
+assert a.month == 5
+assert a.day == 3
+
+a = 2003.6.4
+assert a.year == 2003
+assert a.month == 6
+assert a.day == 4
+
+// month/day/year
+
+a = 2/1/2008
+assert a.year == 2008
+assert a.month == 2
+assert a.day == 1
+
+assert 3-6-2013 == 2013/3/6
+
+// with time
+
+a = 2010/3/4 10:20
+assert a.year == 2010
+assert a.month == 3
+assert a.day == 4
+assert a.hour == 10
+assert a.minute == 20
+
+// format
+
+assert 2009/4/6.format('yyyy-MM-dd') == '2009-04-06'
+assert 2012/6/9.format('yy/M/d') == '12/6/9'
+
+// compare
+
+assert 2013/3/5 > 2011/9/6
+assert 1999/3/7 < 2004/2/3
+assert 2003.4.5 >= 2003.4.5
+assert 2003.4.5 >= 2003.4.2
+assert 2003.4.5 20:19 > 2003.4.5 18:00
+
+// plus, minus
+
+a = 2009/3/4
+b = 2009/3/2
+
+assert a - b == 48:00
+assert 2008/5/6 + 24:00 == 2008/5/7
+assert 2009/12/31 + 29:06 == 2010/1/1 5:06:00
+assert 2009/7/8 - 12:00 == 2009/7/7 12:00
+
+// time zone
+
+a = 2013-5-6 'America/Los_Angeles'
+assert a.timeZone.ID == 'America/Los_Angeles'
+
+a = 2014-3-8 8:21:38 'GMT+0600'
+b = 2014-3-8 8:21:38 'GMT'
+
+assert b - a == 6:00
+
+a = 2013-4-6
+assert a.timeZone == java.util.TimeZone.getDefault
+
+startTest('duration')
+
+a = 10:20:12
+assert a.hour == 10
+assert a.minute == 20
+assert a.second == 12
+assert a.milisecond == 37212000
+assert a.toSecond == 37212
+assert a.toMinute == 620
+assert a.toHour == 10
+
+a = 48:63:72
+assert a.toDay == 2
+
+assert 5:20 + 0:40 == 6:00
+assert 23:30 - 2:30 == 21:00
+assert 12:20 / 2 == 6:10
+assert 4:12 * 3 == 12:36
+assert 40:00 / 20:00 == 2
+
+startTest('file')
+
+file := %foo.txt
+assert file.name == 'foo.txt'
+assert file.extensionName == 'txt'
+
+// plus
+assert %/xx + '/foo.txt' == %/xx/foo.txt
+assert %/xx + %yy.txt == %/xx/yy.txt
+assert %xx + %yy + %foo.txt == %xx/yy/foo.txt
+
+file = %tmp_file.txt
+file << 'felo323\n'
+file << 'laftje3\n'
+file << 'lsefs23\n'
+file << 'Something\n'
+
+assert file is File
+
+assert file.read == 'felo323\nlaftje3\nlsefs23\nSomething\n'
+
+'xyz' >> file
+assert file.read == 'felo323\nlaftje3\nlsefs23\nSomething\nxyz'
+
+line := ''
+
+file.readLine {
+   if (it is /laf(.)+/) {
+      line = it
+   }
+}
+
+assert line == 'laftje3'
+
+file < '123'
+assert file.read == '123'
+
+'abc' > file
+assert file.read == 'abc'
+
+file.delete
+
+a = "bb123"
+
+file = %abc{a}
+assert file.name == 'abcbb123'
+
+file = %abc{a}xx
+assert file.name == 'abcbb123xx'
+
+file = %{a}xx
+assert file.name == 'bb123xx'
+
+file = %{a}
+assert file.name == a
+
+startTest('URL')
+
+address := http://www.abc.com:80/path?name=x&value=12
+assert address.protocol == 'http'
+assert address.host == 'www.abc.com'
+assert address.port == 80
+assert address.path == '/path'
+assert address.query == 'name=x&value=12'
+assert address.parameters.name == 'x'
+assert address.parameters.value == '12'
+
+assert address + '&x=0' == http://www.abc.com:80/path?name=x&value=12&x=0
+assert address + %index.htm == http://www.abc.com:80/path/index.htm?name=x&value=12
+assert http://www.xxx.com + %index.html == http://www.xxx.com/index.html
+assert http://www.xxx.com + %/index.html == http://www.xxx.com/index.html
+
+file = %yahoo.htm
+file.delete
+yahoo := http://www.yahoo.com
+
+content := yahoo.read
+%yahoo.html < content
+
+assert %yahoo.html .exists
+%yahoo.html .delete
+
+startTest('closure')
+
+a = #{10}
+assert a() == 10
+
+b = 23
+a = #{12 + b}
+assert a() == 35
+
+a = #(x) {x + b}
+assert a(2) == 25
+
+a = #{it + 1}
+assert a(3) == 4
+
+startTest('object')
+
+assert 12 instanceof Integer
+assert 2.3 instanceof Float[value:0..10]
+assert 'xx' instanceof String
+assert !('xx' instanceof /xx/)
+assert /xx/ instanceof [RegexPattern, String]
+
+startTest('method')
+
+a = 10
+def foo {10}
+def foo(x) {x + a}
+def foo(x, y) {x + y}
+
+assert foo == 10
+assert foo() == 10
+assert foo(2) == 12
+assert foo(4, 5) == 9
+
+startTest('class')
+
+a = new sample.ClassA
+assert a != null
+
+a.a = 10
+assert a.a == 10
+assert a.c == 10
+try {
+    a.text1 = 1
+    assert false
+} catch(e) {
+   assert true
+}
+a.text2 = 'text2'
+assert a.text2 == 'text2'
+try {
+    a.text3 = 1
+    assert false
+} catch(e) {
+   assert true
+}
+a.text4 = 'text4'
+assert a.text4 == 'text4'
+
+b = new sample.ClassB
+assert b.say == 'say: 1'

@@ -1,0 +1,204 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>OOP -- Soya 1.0-bata</title>
+    <link type="text/css" rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="background">
+        <div>
+            <h2>面向对象</h2>
+        </div>
+        <div>
+            class 的定义与包括Java在内的高级面向对象语言相类似，但也有些不同。其中class定义所在的文件的名称必须与类名相同，并且一个Soya源文件只能定义一个class。其定义的语法也稍有不同，无需用 { } 将成员方法和属性包裹在内。而其中的方法和属性都默认为 public
+        </div>
+        <div class="code">
+            <pre>
+// ClassA.soya
+class ClassA
+
+def say {
+    println("hello")
+}</pre>
+        </div>
+        <div>
+            在另一个源文件中调用
+        </div>
+        <div class="code">
+            <pre>
+// Another.soya
+
+a := new ClassA
+a.say  // --> hello</pre>
+        </div>
+        <div>
+            <h3>字段</h3>
+        </div>
+        <div>
+            类中可以定义字段，就类似定义变量一样使用 := 定义并给予初值，并且能定义修饰赋（public, private, protected）。省略修饰符时默认为public
+        </div>
+        <div class="code">
+            <pre>
+// Test.soya
+class Test
+    public text1 := 'a'
+    private text2 := 'b'
+    protected text3 := 'c'
+    text4 := 'd'
+            </pre>
+        </div>
+        <div class="code">
+            <pre>
+test := new Test
+println(test.text1)  // --> a
+println(test.text2)  // Error! text2 is private
+println(test.text3)  // Error! text3 is protected
+println(test.text4)  // --> d</pre>
+        </div>
+        <div>
+            <h3>属性</h3>
+        </div>
+        <div>
+            属性的声明会产生对应的private字段和Getter/Setter方法。属性分三种形式，分别是：
+            <ul>
+                <li>property  -- 可读可写(有Getter/Setter方法)</li>
+                <li>readonly  -- 只可读不可写(只有Getter方法，没有Setter方法)</li>
+                <li>writeonly -- 只可写不可读(只有Setter方法，没有Getter方法)</li>
+            </ul>
+        </div>
+        <div class="code">
+            <pre>
+// Test.soya
+class Test
+
+property:
+    a: 1
+    b: 4
+
+readonly:
+    c: 5
+    d: 6
+
+writeonly:
+    e: 9</pre>
+        </div>
+        <div class="code">
+            <pre>
+// Another.soya
+
+test := new Test
+test.setA(5)
+test.a = 10   // as same as test.setA(10)
+println(test.getA())
+println(test.C)  // as same as test.getC()
+
+test.setD(21)    // Error! property 'd' is readonly, no 'setD' method
+
+test.e = 32
+test.getE()      // Error! property 'e' is writeonly, no 'getE' method</pre>
+        </div>
+        <div>
+            您在定义既可读又可写的属性时，可以略去property:标签
+        </div>
+        <div class="code">
+            <pre>
+class Test
+    a: 10
+    b: 20
+    c: 30</pre>
+        </div>
+        <div>
+            <h3>构造方法</h3>
+        </div>
+        <div>
+            您可以在类中定义构造方法，这些构造方法会在class实例化时被调用。构造方法能够重载，根据实例化时的参数数量来调用响应的构造方法。在Soya构造方法与在Java中使用类名定义的方法不同，而是使用关键字 init
+        </div>
+        <div class="code">
+            <pre>
+// A.soya
+class A
+   text: 'hello'
+
+init {
+    println(text)
+}
+
+init(x) {
+    println("{text}, {x}")
+}</pre>
+        </div>
+        <div class="code">
+            <pre>
+// Another.soya
+
+a1 := new A  // --> hello
+a2 := new A('A')  // --> hello, A</pre>
+        </div>
+        <div>
+            <h3>继承</h3>
+        </div>
+        <div>
+            在Soya中定义的类可以继承Soya类，也可以继承Java类。继承的语法同Java一样使用 extends 关键字
+        </div>
+        <div class="code">
+            <pre>
+// A.soya
+class A
+
+def say {println('it is A')}
+
+def doSomething {println("do it, {say()}")}
+            </pre>
+        </div>
+        <div class="code">
+            <pre>
+// B.soya
+class B extends A
+
+def say {println('it is B')}
+            </pre>
+        </div>
+        <div class="code">
+            <pre>
+// Test.soya
+
+a := new A
+b := new B
+
+a.doSomething  // --> do it, it is A
+b.doSomething  // --> do it, it is B</pre>
+        </div>
+        <div>
+            <h3>Pcakge</h3>
+        </div>
+        <div>
+            同Java一样，您可以定义类所在的包，规则也同Java一样，包名需要与类文件所在的目录名相同
+        </div>
+        <div class="code">
+            <pre>
+// org/foo/A.soya
+
+package foo
+
+class A
+
+def say {println('ok')}
+            </pre>
+        </div>
+        <div>
+            在另一个源文件中需要用 import 语句导入，以方便调用
+        </div>
+        <div class="code">
+            <pre>
+// org/test/Another.soya
+
+package test
+
+import org.foo.A
+
+a := new A
+a.say</pre>
+        </div>
+    </div>
+</body>
+</html>

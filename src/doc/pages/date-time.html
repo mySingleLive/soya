@@ -1,0 +1,131 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Date and time -- Soya 1.0-bata</title>
+    <link type="text/css" rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="background">
+    <div>
+        <h2>日期</h2>
+    </div>
+    <div>
+        Soya内置了日期的字面量语法，以最直接的方式表示日期类型数据。可以使用以下年月日排列的方式创建日期对象。该对象为soya.lang.SoyaDate类实例。
+    </div>
+    <div class="code">
+        <pre>
+// &lt;year&gt;/&lt;month&gt;/&lt;day&gt;
+date := 1998/4/12
+assert date.year == 1998
+assert date.month == 4
+assert date.day == 12
+
+// &lt;year&gt;\&lt;month&gt;\&lt;day&gt;
+date = 2000\9\2
+assert date.year == 2000
+assert date.month == 9
+assert date.day == 2
+
+// &lt;year&gt;-&lt;month&gt;-&lt;day&gt;
+date = 2006-4-12
+assert date.year == 2006
+assert date.month == 4
+assert date.day == 12
+
+// &lt;year&gt;.&lt;month&gt;.&lt;day&gt;
+date = 2008.6.20
+assert date.year == 2008
+assert date.month == 6
+assert date.day == 20</pre>
+    </div>
+    <div>
+        Soya同时也支持月日年的排列方式
+    </div>
+    <div class="code">
+        <pre>
+date := 3/12/2009
+assert date.year == 2009
+assert date.month == 3
+assert date.day == 12</pre>
+    </div>
+    <div>
+        在日期后面可以带有时间
+    </div>
+    <div class="code">
+        <pre>
+datetime := 2009-4-5 12:23
+assert datetime.hour == 12
+assert datetime.minute == 23</pre>
+    </div>
+    <div>
+        <h2>时间长度</h2>
+    </div>
+    <div>
+        Soya支持描述时间长度的字面量语法。语法形式可以用冒号':'分割小时、分钟、秒(如 12:40:32)，也可以省略秒数(如 10:18)
+    </div>
+    <div class="code">
+        <pre>
+duration := 10:20:12
+assert a.hour == 10
+assert a.minute == 20
+assert a.second == 12
+assert a.milisecond == 37212000
+assert a.toSecond == 37212
+assert a.toMinute == 620
+assert a.toHour == 10</pre>
+    </div>
+    <div>
+        日期和时长能进行加减法运算。需要注意的是日期只能和时长相加，但不能与日期相加。
+    </div>
+    <div class="code">
+        <pre>
+assert 2011/3/4 - 2011/3/2 == 48:00
+assert 2005/5/6 - 12:05 == 2005/5/5 11:55
+assert 2009/7/2 + 10:20 == 2009/7/2 10:20
+assert 20:23 - 2:03 == 18:20
+assert 09:03 + 01:07 == 10:10
+assert 2008/5/6 3:00 + 48:30 == 2008/5/7 3:30</pre>
+    </div>
+    <div>
+        <h2>时区</h2>
+    </div>
+    <div>
+        可以在日期（和时间）的字面量后追加时区信息
+    </div>
+    <div class="code">
+        <pre>
+date := 2013-5-6 'America/Los_Angeles'
+date1 := 2014-3-8 8:21:38 'GMT+0600'
+date2 := 2014-3-8 8:21:38 'GMT'
+
+assert date.timeZone.ID == 'America/Los_Angeles'
+assert date2 - date1 == 6:00</pre>
+    </div>
+    <div>
+
+    </div>
+    <div>
+        当时区用双引号字符串表达时，可以动态替换时区信息
+    </div>
+    <div class="code">
+        <pre>
+city := 'Shanghai'
+2014-5-7 9:00 "China/{city}"
+
+offset := 8
+2014-8-4 14:00 "GMT+{offset}"</pre>
+    </div>
+    <div>
+        在不写时区的时候，默认为 java.util.TimeZone.getDefault() 的值
+    </div>
+
+    <div class="code">
+        <pre>
+import java.util.TimeZone
+
+a = 2013-4-6
+assert a.timeZone == TimeZone.getDefault</pre>
+    </div>
+</div>
+</body>
+</html>

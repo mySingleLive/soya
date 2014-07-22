@@ -1,0 +1,17 @@
+
+
+def quickSort(lst) ->
+    | [] -> []
+    | List[first: int f, tail: List t] -> 
+          quickSort(t[..<f]) + [f] + quickSort(t[f..])
+
+list := [42, 4, 5, 0, 13, 435, 234, 1934, 2953, 239, -3, 55]
+
+println("before sort: {list}")
+list = quickSort(list)
+println("after sort: {list}")
+
+assert list == [-3, 0, 4, 5, 13, 42, 55, 234, 239, 435, 1934, 2953]
+
+
+

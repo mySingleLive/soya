@@ -1,0 +1,63 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Strings -- Soya 1.0-bata</title>
+    <link type="text/css" rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="background">
+        <div>
+            <h2>字符串</h2>
+        </div>
+        <div>
+            您可以使用单引号或双引号来构造字符串
+        </div>
+        <div class="code">
+            <pre>
+'abcd'
+"1234"</pre>
+        </div>
+        <div>
+            在双引号字符串中，允许使用内嵌表达式替换字符串内容。而单引号字符串则不会替换内容
+        </div>
+        <div class="code">
+            <pre>
+a := 2
+assert "value is {a}" == "value is 2"
+assert "2 + 3 is {2 + 3}" == "2 + 3 is 5"
+assert 'a is {a}' == 'a is {a}'</pre>
+        </div>
+        <div>
+            多行字符串。单引号字符串可以写成多行形式，但换行部分不会转换为换行符。三倍重复单引号或双引号形式的字符串能插补换行符
+        </div>
+        <div class="code">
+            <pre>
+a := 'This is a multiline string
+with single quotes'
+
+assert a == 'This is a multiline string with single quotes'
+
+b := '''This is a multiline string
+with triple single quotes'''
+
+assert b == "This is a multiline string\nwith triple single quotes"</pre>
+        </div>
+        <div>
+            三倍双引号形式的多行字符串同普通双引号字符串一样，允许内嵌替换表达式。同时三倍重复单引号字符串不会替换内容
+        </div>
+        <div class="code">
+            <pre>
+name := "John"
+
+message1 := """Hi, {name}
+I want to see you."""
+
+message2 := '''Hi, {name}
+I want to see you.'''
+
+assert message1 == 'Hi, John\nI want to see you.'
+assert message2 == 'Hi, {name}\nI want to see you.'</pre>
+        </div>
+    </div>
+</body>
+</html>

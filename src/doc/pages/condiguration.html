@@ -1,0 +1,56 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Configuration -- Soya 1.0-bata</title>
+    <link type="text/css" rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="background">
+        <div>
+            <h2>安装和配置</h2>
+        </div>
+        <div>
+            安装配置步骤：
+        </div>
+        <div>
+            <ul>
+                <li>下载和安装JDK（6.0或以上)</li>
+                <li>设置环境变量JAVA_HOME为JDK所在目录</li>
+                <li>将JAVA_HOME/bin添加到PATH环境变量中</li>
+                <li>设置环境变量SOYA_HOME为soya所在目录</li>
+                <li>将SOYA_HOME/bin添加到PATH环境变量中</li>
+            </ul>
+            您可以尝试在命令行中输入以下命令来测试配置是否正确</br>
+            <div class="code">
+                <pre>
+    soya -version</pre>
+            </div>
+            键入以下命令以运行一个soya脚本</br>
+            <div class="code">
+                <pre>
+    soya aScript.soya</pre>
+            </div>
+        </div>
+        <div>
+            <h4>在IDE中运行Soya</h4>
+        </div>
+        <div>
+            通过带有main方法的类Main来启动运行Soya脚本，具体可根据下列设置方式来运行Soya脚本</br>
+            <div class="code">
+                <pre>
+    java org.soya.tools.Main [Source File] [arguments]</pre>
+            </div>
+        </div>
+        <div>
+            <h4>在命令行中运行Soya</h4>
+        </div>
+        <div>
+            根据您所使用的操作系统可以选择'soya'或'soya.bat'来运行脚本，只要您正确安装配置了Soya，可以通过下列方式运行Soya</br>
+            <div class="code">
+                <pre>
+    soya [Source File] [arguments]</pre>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

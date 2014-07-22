@@ -1,0 +1,116 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Branch -- Soya 1.0-bata</title>
+    <link type="text/css" rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="background">
+    <div>
+        <h2>控制结构 -- 分支</h2>
+    </div>
+
+    <div>
+        <h3>if-else</h3>
+        <div>Soya支持Java基本的if-else语法, 以及嵌套的if then else if语法</div>
+        <div class="code">
+            <pre>
+    x := 0
+    y := 2
+    if (x != y) {
+       x = y
+    }
+
+    x = 10
+    if (x < 0) {
+       x = 1
+    }
+    else if (x > 0) {
+       x = -1
+    }
+    else {
+       x = 0
+    }
+            </pre>
+        </div>
+        <div>此外，在Soya中的if-else还能直接进行表达式运行（如+，-，*，/，赋值和方法调用等）</div>
+        <div class="code">
+            <pre>
+    x := 0
+    y := if (x == 0) {1} else {-1}
+
+    println(if (y == 1) {'case 1'} else {'case 2'})
+
+    y = if (x == 0) {10} else {20} + 1
+    assert y == 11
+
+    assert if (x == 0) {'aaaa'} else {'a'}.length == 4
+            </pre>
+        </div>
+        <h3>match语句</h3>
+        <div>Soya中的match语句能通过不同的匹配条件执行不同的结果。相比java中的switch语句，它没有break语句，每条匹配后的语句块也都是独立的，而且它还支持丰富的匹配模式。</div>
+        <div class="code">
+            <pre>
+    x := 10
+    result := ""
+    match(x)
+       | "foo" -> result = 'case 1'
+       | /abc.*/ -> result = 'case 2'
+       | 0..100 -> result = 'case 3'
+       | String[length:1..10] -> result = 'case 4'
+       | Integer -> result = 'case 5'
+       | _ -> result = 'case 6'
+
+    assert result == 'case 3'
+            </pre>
+        </div>
+        <div>其中有以下几种匹配模式：
+            <ul>
+                <li>值匹配：如"foo"只要和被匹配的表达式的值相等就算匹配成功</li>
+                <li>正则表达式匹配：/abc.*/, 判断字符串是否符合该正则表达式</li>
+                <li>数值范围匹配：0..100, 判断表达式的值是否在此范围内</li>
+                <li>类型匹配：String、Integer、_,判断表达式的值是不是属于该类型,下划线_ 表示的是java.lang.Object，可以匹配所有类型的对象。其中String后还有[length: 3]条件块，判断值为String类型的同时，其length属性的值也必须满足1..10的嵌套匹配。
+                </li>
+            </ul>
+        </div>
+        <div>在匹配模式中使用别名, 当匹配成功后，其别名对应的值会存到别名变量中，可以在语句块中调用模式中定义别名变量</div>
+        <div class="code">
+            <pre>
+    x := "foo"
+    result = ""
+    match(x)
+        | String[length: int i] -> result = x + i
+        | _ -> result = "none"
+
+    assert result == "foo3"
+            </pre>
+        </div>
+        <div>match下的语句块可以是用{}包裹的多行形式，也可以是一句单行的语句</div>
+        <div class="code">
+            <pre>
+    match([expression])
+        | 1..10 -> ...
+
+    match([expression])
+        | 'abc' -> {
+             ...
+          }
+        | _ -> {
+             ...
+          }
+            </pre>
+        </div>
+        <h3>match表达式</h3>
+        <div>match语句的表达式形式</div>
+        <div class="code">
+            <pre>
+    x := 3
+    y := x match
+       | 2 | 3 | 4 | 5 -> "ok"
+       | _ -> "no"
+            </pre>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,10 @@
+
+yahoo := http://www.yahoo.com
+
+google := http://www.google.com
+
+println(google.host)
+
+%yahoo < yahoo.read
+
+println(%yahoo .read)

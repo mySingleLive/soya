@@ -1,0 +1,7 @@
+import sample.ClassA
+
+class ClassB extends ClassA
+
+def say {
+  "say: {this.a}"
+}

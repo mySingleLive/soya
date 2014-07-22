@@ -1,0 +1,64 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Loop -- Soya 1.0-bata</title>
+    <link type="text/css" rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="background">
+    <div>
+        <h2>控制结构 -- 循环</h2>
+    </div>
+    <div>
+        <h3>for循环</h3>
+        <div>for循环是Soya中支持的唯一循环语句，关键字就如Java、C等语言中的for一样。但不同的是</br>
+            Soya中的for支持多种不同的循环形式。</div>
+        <div class="code">
+            <pre>
+// 无限循环
+for {
+   ...
+}
+
+// 条件循环
+i := 0
+for (i < 10) {
+   ...
+   i++
+}
+
+// 条件、步长循环
+for (i = 0; i < 10; i++) {
+   ...
+}
+        </pre>
+    </div>
+    <div>配合关键字in能快速的遍历集合和Range</div>
+    <div class="code">
+        <pre>
+for (x in 1..100) {
+   ...
+}
+
+for (item in [1, 2, 3, 5, 7]) {
+   ...
+}
+        </pre>
+    </div>
+    <h3>闭包</h3>
+    <div>在Soya中集合的接口中有不少通过闭包来遍历或重复处理的方法，如each、find等</div>
+    <div class="code">
+        <pre>
+list := [2, 3, 5, 6, 7]
+list.each {
+    println(it)
+}
+
+results := list.find {it <= 5}
+assert results == [2, 3, 5]
+        </pre>
+    </div>
+    </div>
+</div>
+</body>
+</html>

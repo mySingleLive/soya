@@ -1,0 +1,56 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Files -- Soya 1.0-bata</title>
+    <link type="text/css" rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="background">
+    <div>
+        <h2>文件</h2>
+    </div>
+    <div>
+        Soya内置了创建文件的字面量语法，用%开头的字符串就非常简单而直接地表达创建文件，该文件对象属于soya.lang.SoyaFile类。其中，文件名除了能含有大小写字母和数字外，还可以包含 ~ ! @ # $ % ^ & - + = , .，: / \ 这些字符。但要注意的是开头第一个字符不能是 =
+    </div>
+    <div class="code">
+        <pre>
+file := %abc.txt
+assert file is priam.lang.SoyaFile
+assert file.name == 'abc.txt'</pre>
+    </div>
+    <div>
+        需要注意的是，在访问和操作文件对象的属性和方法的时候，不能直接在字面量后面使用 . 操作符，比如 %foo.toString 不会被编译器看做是调用%foo对象的toString方法，而是解释成名为"foo.toString"文件。所以在这时您需要在字面量后至少空出一个空格或者用括号讲文件字面量包裹的方法来进行操作，如： %foo .toString 或者 (%foo).toString 不会有歧义。
+    </div>
+    <div class="code">
+        <pre>
+filename := %foo.name
+println(filename)   // foo.name
+
+filename = %foo .name
+println(filename)   // foo
+
+filename = (%foo).name
+println(filename)   // foo</pre>
+    </div>
+    <div>
+        Soya允许您在创建文件的时候使用文件名模板，如 %foo.{ext} 能将{ }中的变量和表达式的结果拼接如文件名。
+    </div>
+    <div class="code">
+        <pre>
+ext := 'jpg'
+file := %abc.{ext}
+assert file.name == 'abc.jpg'
+assert file.extensionName == 'jpg'
+
+list := []
+for (i in 1..10) {
+    // create files with index number
+    file = %foo_{i}.txt
+    list << file
+}
+
+</pre>
+    </div>
+</div>
+</body>
+</html>

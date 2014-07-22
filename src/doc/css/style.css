@@ -1,0 +1,79 @@
+
+body {
+    margin: 20 0 20 0;
+    background-color: #d3d3d3;
+}
+
+.background {
+    width: 860px;
+    margin: 0 auto 0 auto;
+    padding: 50 20 60 20;
+    background-color: white;
+    font-size: 14px;
+    line-height: 22px;
+}
+
+.index {
+}
+
+.index ul li {
+    list-style-type: disc;
+    list-style-position: outside;
+    line-height: 20px;
+    font-size: 16px;
+}
+
+a:link {color: #5a5aff; text-decoration:none;}
+a:visited {color:#5a5aff; text-decoration:none;}
+a:hover {color: #5a5aff; text-decoration:underline;}
+
+.code {
+    margin: 10 0 20 0;
+    border:1px solid #202020;
+    background-color: #d3d3d3;
+}
+
+.code pre {
+    padding: 10 15 0 15;
+    color: #000000;
+    font-size: 14px;
+    line-height: 16px;
+}
+
+.code_table {
+    background-color: #d3d3d3;
+}
+
+.code_table td {
+    vertical-align: text-top;
+}
+
+.code_table pre {
+    padding-top: 10;
+    color: #000000;
+    font-size: 14px;
+    line-height: 16px;
+}
+
+.doc_table {
+    border-right: 1 solid #343434;
+    border-top: 1 solid #343434;
+    line-height: 40px;
+    border-collapse: collapse;
+}
+
+
+.doc_table td {
+    border-left: 1 solid #343434;
+    border-bottom: 1 solid #343434;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 410px;
+}
+
+.doc_table th {
+    border-left: 1 solid #343434;
+    border-bottom: 1 solid #343434;
+    background-color: #a2a4b3;
+    width: 410px;
+}

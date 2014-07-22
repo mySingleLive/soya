@@ -1,0 +1,202 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Collections -- Soya 1.0-bata</title>
+    <link type="text/css" rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="background">
+        <div>
+            <h2>模式匹配</h2>
+        </div>
+        <div>
+            模式匹配是一种计算数据和某种结构组织对应关系的过程。其越来越多地应用到现代编程语言中，成为了像Scala这类语言的基本语法。Soya在语言上的各方面加入了对模式匹配的支持，比如：match表达式和pattern class等
+        </div>
+        <div>
+            <h3>模式</h3>
+        </div>
+        <div>
+            模式是一种结构，在Soya中表现为各种形式的对象。一个Integer数、一个String都可以算作是模式最简单的形式。在Soya中更多的使用类模式，java.lang.List可以匹配所有列表对象。
+        </div>
+        <div class="code">
+            <pre>
+def doMatch(x) {
+    | 100       -> println('Integer(100)')
+    | 'Hello'   -> println('String(Hello)')
+    | List      -> println("List({x})")     // List is not a Class instance, but Pattern object
+    | [1, 2, 4] -> println("match [1, 2, 4]")
+    | name: 'A', value: 'ok' -> println("match map")
+    | _         -> println("every things")  // _ is alias of java.lang.Object,
+                                            // it can match every objects
+}
+            </pre>
+        </div>
+        <div>
+            <h4>模式的与/或</h4>
+        </div>
+        <div>
+            使用 &amp; 和 | 操作符可以方便的创造出与/或的复合模式结构。其中 &amp; 产生的是soya.util.pattern.And对象， | 产生的是soya.util.pattern.Or对象
+        </div>
+        <div class="code">
+            <pre>
+listAndString := List &amp; String
+all10 := 10 | '10' | [10] | ['10']
+assert listAndString instanceof And
+assert all10 instanceof Or
+
+xNum := (-10..30 &amp; 2..31) | 100.200
+assert -3 is xNum
+assert 101 is xNum</pre>
+        </div>
+        <div>
+            <h4>模式条件</h4>
+        </div>
+        <div>
+            如果您想要对对象进行更细致的匹配，可以使用模式条件，其语法形式也十分简单，只需要在类模式后加上 [attr: pattern, ...] 语法形式的内容即可。其中attr代表的是对象的属性或方法，pattern则是调用该属性或方法得到的值所需匹配的对应模式
+        </div>
+        <div class="code">
+            <pre>
+def doMatch(x) {
+    | List[size: 20>.., first: 10] -> ...  // match a list which size greater than 20 and
+                                           // the first element must be 10
+}</pre>
+        </div>
+        <div>
+            <h4>模式别名</h4>
+        </div>
+        <div>
+            很多时候我们在模式匹配的过程中需要得到其中间结果。在Soya中只要定义模式别名，其对应模式的匹配结果就会存到以该别名命名的变量中，我们便可以在该别名定义所在的作用域范围内使用这个变量
+        </div>
+        <div class="code">
+            <pre>
+def doMatch(x) {
+    | List[size: int s, first: _ f] -> println("size: {s}, first: {f}")
+}
+
+doMatch([18, 6, 4])  // -> size: 3, first: 18</pre>
+        </div>
+        <div>
+            别名通常更多的时候是配合block形式的闭包使用
+        </div>
+        <div class="code">
+            <pre>
+[2, 4, 'x', [1, 4], [5, 1, 6]].each(List[size: _ s] lst) {
+    println("size: {s}")
+}
+// -->
+// size: 2
+// size: 3</pre>
+        </div>
+        <div>
+            <h3>模式类</h3>
+        </div>
+        <div>
+            模式通常是一些常用的匹配逻辑，我们需要讲这些模式模块化，以方便以后的使用与维护。其语法形式如下：
+        </div>
+        <div class="code">
+            <pre>
+pattern class &lt;pattern class name>
+   | Pattern 1
+   | Pattern 2
+   | ...</pre>
+        </div>
+        <div>
+            模式类常用于对普通class的补充
+        </div>
+        <div class="code">
+            <pre>
+// Person.soya
+class Person
+  name: ''
+  gender: 'm'
+  age: 0</pre>
+        </div>
+        <div class="code">
+            <pre>
+// Male.soya
+pattern class Male
+   | Person[gender: 'm' | 'M']</pre>
+        </div>
+        <div class="code">
+            <pre>
+// Female.soya
+pattern class Female
+   | Person[gender: 'f'| 'F']</pre>
+        </div>
+        <div class="code">
+            <pre>
+// Young.soya
+pattern class Young
+   | Person[age: ..&lt;30]</pre>
+        </div>
+        <div class="code">
+            <pre>
+// Old.soya
+pattern class Old
+   | Person[age: 50>..]
+            </pre>
+        </div>
+        <div class="code">
+            <pre>
+// Girl.soya
+pattern class Girl
+   | Young &amp; Female
+            </pre>
+        </div>
+        <div class="code">
+            <pre>
+// Test.soya
+
+peter := new Person
+peter.name = 'Peter'
+peter.gender = 'm'
+peter. age = 60
+
+marry := new Person
+marry.name = 'Marry'
+marry.gender = 'f'
+marry.age = 20
+
+assert peter is (Old &amp; Person)
+assert marry is Girl
+assert peter is not Female</pre>
+        </div>
+        <div>
+            <h3>一些匹配的方法</h3>
+        </div>
+        <div>
+            在集合的下标中使用模式匹配
+        </div>
+        <div class="code">
+            <pre>
+list := [1, 4, 'a', 3, 'b']
+list[String]  // --> ['a', 'b']</pre>
+        </div>
+        <div>
+            在方法调用时的参数中使用模式匹配
+        </div>
+        <div class="code">
+            <pre>
+list := [3, 4, 10, 40]
+list.each(10..) {
+    println(it)
+}
+// -->
+// 10
+// 40</pre>
+        </div>
+        <div>
+            在赋值中使用模式匹配
+        </div>
+        <div class="code">
+            <pre>
+list := [3, 6, 'x', 3, 'y']
+list[int i] = i + 1
+println(list)  // --> [4, 7, 'x', 4, 'y']
+
+list.each(String s, Index i) = "{i}, {s}!"
+println(list)  // --> [4, 7, '2, x!', 4, '4, y!']</pre>
+        </div>
+    </div>
+</body>
+</html>

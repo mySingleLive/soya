@@ -1,0 +1,31 @@
+
+/*
+def javadocSpec = {
+    maxMemory = javaDoc_mx
+    project.configure(options) {
+        windowTitle = doc.title
+        docTitle = doc.title
+        encoding = "UTF-8"
+        author = true
+        version = true
+        overview = rootProject.file("src/main/overviewj.html")
+        footer = doc.footer
+        source = rootProject.useIndy()?'1.7':'1.5'
+        links("http://docs.oracle.com/javase/6/docs/api/", "http://evgeny-goldin.org/javadoc/ant/api/",
+                "http://commons.apache.org/cli/api-release", "http://kentbeck.github.com/junit/javadoc/latest/",
+                "http://docs.oracle.com/javaee/6/api/", "http://www.antlr2.org/javadoc")
+    }
+}
+*/
+
+
+
+javadoc {
+    options.encoding = "UTF-8"
+    source = rootProject.fileTree(
+        from: 'src/main/soya'
+    )
+    options.author = true
+    options.version = true
+    options.locale = 'en'
+}
