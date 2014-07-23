@@ -2,9 +2,7 @@
 
 println('test closure')
 
-f := #(a, b) {
-  a + b
-}
+f := #(a, b) {a + b}
 
 println(f.numberOfParameters)
 println(f.class.methods[_[name: /(\w)*call/]])
