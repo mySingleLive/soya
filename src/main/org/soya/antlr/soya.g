@@ -1482,14 +1482,14 @@ starListGroup
     AST ret = null;
     boolean multi = false;
 }
-    :   (starListHeadItem) =>
+    :   (starListStart) =>
         (
             s1:starList
             {
                 ret = #s1;
             }
             (   options { greedy = true; } :
-                (nls starListHeadItem) =>
+                (nls starListStart) =>
                 nls! starList
                 {
                     multi = true;
@@ -1513,8 +1513,8 @@ starList
 }
 	:	starListHeadItem
 		(
-		    (NLS ~(INDENT | DEDENT)) =>
-            NLS! starListItem
+		    ((NLS | COMMAR nls) (INDENT)? ~(INDENT | DEDENT)) =>
+            (NLS! | COMMAR! nls!) starListItem
 		)*
 		nls! DEDENT!
 		{
@@ -1522,12 +1522,19 @@ starList
 		}
 	;
 
+starListStart
+	:   STAR nls INDENT ~STAR
+	;
+
 starListHeadItem
-    :   STAR! nls! INDENT! (starListGroup | yamlHashStatement | expression)
+    :   STAR! nls! INDENT! (yamlHashStatement | expression)
     ;
 
 starListItem
-	:	(starListGroup | yamlHashStatement | expression)
+	:	(INDENT nls STAR) => INDENT! nls!  starListGroup nls! DEDENT!
+    |   (starListStart) => starListGroup
+    |   yamlHashStatement
+    |   expression
 	;
 
 identifier
