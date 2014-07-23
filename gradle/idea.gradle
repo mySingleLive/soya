@@ -101,7 +101,6 @@ idea {
                       <method />
                     </configuration>
                 ''')
-
             }
         }
     }
