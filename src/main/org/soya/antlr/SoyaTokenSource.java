@@ -1,16 +1,15 @@
 package org.soya.antlr;
 
-import java.util.Vector;
-import java.util.logging.Logger;
-
 import antlr.CharStreamException;
-import antlr.TokenStreamException;
-import org.soya.runtime.SoyaException;
-import org.soya.antlr.parser.SoyaLexer;
-import org.soya.antlr.parser.SoyaParser;
-
 import antlr.Token;
 import antlr.TokenStream;
+import antlr.TokenStreamException;
+import org.soya.antlr.parser.SoyaLexer;
+import org.soya.antlr.parser.SoyaParser;
+import org.soya.runtime.SoyaException;
+
+import java.util.Vector;
+import java.util.logging.Logger;
 
 import static org.soya.antlr.parser.SoyaParserTokenTypes.*;
 
@@ -262,6 +261,13 @@ public class SoyaTokenSource implements TokenStream {
                 if (token.getType() == indentationListTokenType) {
                     //System.out.println("--------------------- NL " + token + "  **** -------");
                     SoyaToken starToken = (SoyaToken)token;
+                    this.setAllowHandleIndentation(true);
+
+//                    this.addIndentation(starToken.getColumn(), starToken);
+//                    push(starToken.getColumn());
+//                    beginIndentationIndex = top;
+//                    setAllowHandleIndentation(true);
+
                     tokens.addElement(starToken);
                     token = tokenStream.nextToken();
                     while(token.getType() == NLS) {

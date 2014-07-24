@@ -866,7 +866,7 @@ assignmentRight
 assignmentValueExpression
     :   (K_MATCH) => matchStatement
     |   (K_FOR) => forStatement
-    |   (STAR nls ~STAR) => starList
+    |   (STAR nls ~STAR) => starListGroup
     |	expressionStatement
     ;
 
@@ -1475,28 +1475,63 @@ starListWithIndentation
     :   INDENT! starList nls! DEDENT!
     ;
 
+
+starListGroup
+{
+    Token first = LT(1);
+    AST ret = null;
+    boolean multi = false;
+}
+    :   (starListHeadItem) =>
+        (
+            s1:starList
+            {
+                ret = #s1;
+            }
+            (   options { greedy = true; } :
+                (nls starListHeadItem) =>
+                nls! starList
+                {
+                    System.out.println("is Multi!!");
+                    multi = true;
+                }
+            )*
+            {
+                if (multi) {
+                    System.out.println("DO is Multi!!");
+                    #starListGroup = #(node(LIST, "LIST", first, LT(1)), #starListGroup);
+                }
+                else {
+                    System.out.println("NOT Multi!!");
+                    #starListGroup = ret;
+                }
+            }
+        )
+    ;
+
+
 starList
 {
     Token first = LT(1);
 }
-	:	starListItem
+	:	starListHeadItem
 		(
-		    (NLS STAR) =>
+		    (NLS ~(INDENT | DEDENT)) =>
             NLS! starListItem
 		)*
+		nls! DEDENT!
 		{
 			#starList = #(node(LIST, "LIST", first, LT(1)), #starList);
 		}
 	;
 
 starListHeadItem
-    :   STAR! nls! INDENT! (yamlHashStatement | expression) nls! DEDENT!
+    :   STAR! nls! INDENT! (yamlHashStatement | expression)
     ;
 
 starListItem
-	:	(yamlHashStatement | expression) nls! DEDENT!
+	:	(yamlHashStatement | expression)
 	;
-
 
 identifier
 	:	ID

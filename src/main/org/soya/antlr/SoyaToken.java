@@ -1,6 +1,7 @@
 package org.soya.antlr;
 
 import antlr.Token;
+import org.soya.antlr.parser.SoyaParser;
 
 /**
  * @author: Jun Gong
@@ -62,9 +63,10 @@ public class SoyaToken extends Token {
 	}
 	
 	public String toString() {
-		return "[(" + type +
-                ") " + getText() +
-				" line:" + getLine() + 
+        String typeName = SoyaParser._tokenNames[type];
+		return "[(" + typeName +
+                ") text: \"" + getText() + "\"" +
+				" line:" + getLine() +
 				", col:" + getColumn() +
 				", end-line: " + getEndLine() + 
 				", end-col: " + getEndColumn() +
