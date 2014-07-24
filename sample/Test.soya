@@ -589,8 +589,8 @@ a =
 
 a.sortBy('id')
 
-//assert a*.id == [1, 3, 4, 8]
-//assert a*.name == ['Pfe', 'Gdx', 'Hft', 'Fds']
+assert a*.id == [1, 3, 4, 8]
+assert a*.name == ['Pfe', 'Gdx', 'Hft', 'Fds']
 
 a =
   * id: 3
@@ -607,9 +607,9 @@ a =
 
 a.sortBy('id')
 
-//assert a*.id == [1, 3, 4, 8, null, null]
-//assert a*.size() == [2, 2, 2, 2, 1, 1]
-//assert a*.name == ['Pfe', 'Gdx', 'Hft', 'Fds', 'Ytr', 'Huf']
+assert a*.id == [1, 3, 4, 8, null, null]
+assert a*.size() == [2, 2, 2, 2, 1, 1]
+assert a*.name == ['Pfe', 'Gdx', 'Hft', 'Fds', 'Ytr', 'Huf']
 
 
 // yaml-like expression
