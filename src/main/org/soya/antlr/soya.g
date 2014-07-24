@@ -168,7 +168,7 @@ statement
     |   tryStatement
     |   hashMapConstructExpression
     |   yamlHashStatement
-    |   starList
+    |   starListGroup
     |   matchStatement
     |   matchBlock
     |   importStatement
@@ -1472,7 +1472,7 @@ hashMapKey
 
 
 starListWithIndentation
-    :   INDENT! starList nls! DEDENT!
+    :   INDENT! starListGroup nls! DEDENT!
     ;
 
 
@@ -1526,11 +1526,11 @@ starList
 	;
 
 starListHeadItem
-    :   STAR! nls! INDENT! (yamlHashStatement | expression)
+    :   STAR! nls! INDENT! (starListGroup | yamlHashStatement | expression)
     ;
 
 starListItem
-	:	(yamlHashStatement | expression)
+	:	(starListGroup | yamlHashStatement | expression)
 	;
 
 identifier

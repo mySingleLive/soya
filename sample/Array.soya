@@ -3,8 +3,16 @@ array :=
    * 1
      2
      9
-   * 'xx'
-     'zz'
+     * 'x'
+       5
+       * 'xx'
+         6
+     'y'
+     8
+   * 'abc'
+     'xyz'
+   * 1990-2-3
+     2001-3-4
 
 println(array)
 
