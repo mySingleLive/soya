@@ -1492,17 +1492,14 @@ starListGroup
                 (nls starListHeadItem) =>
                 nls! starList
                 {
-                    System.out.println("is Multi!!");
                     multi = true;
                 }
             )*
             {
                 if (multi) {
-                    System.out.println("DO is Multi!!");
                     #starListGroup = #(node(LIST, "LIST", first, LT(1)), #starListGroup);
                 }
                 else {
-                    System.out.println("NOT Multi!!");
                     #starListGroup = ret;
                 }
             }
