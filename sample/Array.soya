@@ -28,10 +28,15 @@ tb :=
      b: 43
    * a: 34
      b: 10
+     'abc'
+     a: 32
+     b: 70
+   * a: 34
+     b: -23
+
 
 println(ary1)
 println(ary2)
 
 println(tb)
-
 
