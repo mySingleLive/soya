@@ -834,6 +834,9 @@ public class SoyaASTProcessor {
             case MARKUP:
                 expression =  markupExpression(cst);
                 break;
+            case STAR_LIST:
+                expression = starListExpression(cst);
+                break;
             case LIST:
                 expression = listExpression(cst);
                 break;
@@ -1656,6 +1659,19 @@ public class SoyaASTProcessor {
         ConstantExpression constantExpression = new ConstantExpression(value);
         constantExpression.config(cst);
         return constantExpression;
+    }
+
+    protected Expression starListExpression(AST cst) throws SyntaxException {
+        assertCSTType(cst, STAR_LIST);
+        ListExpression ret = listExpression(cst);
+        List<Expression> items = ret.getItems();
+        if (items.size() == 1) {
+            Expression item = items.get(0);
+            if (item instanceof MapExpression) {
+                return item;
+            }
+        }
+        return ret;
     }
 
     protected ListExpression listExpression(AST cst) throws SyntaxException {
