@@ -6,7 +6,7 @@ package org.soya.tools;
 public class Properties {
 
     public static String getVersion() {
-        return "1.0-beta";
+        return "1.0.1-alpha";
     }
 
     public static String getCompilerName() {
