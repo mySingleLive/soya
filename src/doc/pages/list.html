@@ -32,19 +32,37 @@ assert emptyList == [2]</pre>
         <pre>
 nums :=
    * 10
-   * 20
-   * 40
-   * 80
+     20
+     40
+     80
 
 assert nums.size == 4
 assert nums[2] == 40
 
+matrix :=
+   *  2, 32, -1
+   * 11, -6, 79
+   * -2, -3, 54
+
+assert matrix.size == 3
+assert matrix[1][2] == 79
+
 names :=
    * 'A'
-   * 'B'
-   * 'C'
+     'B'
+     'C'
+      * 'a'
+        'b'
+         * 'a1'
+           'b1'
+        'c'
+      * 'A1'
+        'B1'
+   *  'XYX'
+      'ABC'
 
-assert names[1] == 'B'
+assert names[0][1] == 'B'
+assert names[0][3][3] == 'c'
 
 persons :=
    * name: 'Pater'
