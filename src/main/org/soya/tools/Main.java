@@ -13,17 +13,6 @@ public class Main {
 
     public static void doMain(String[] args) throws Throwable {
         try {
-/*
-            System.setProperty("log4j.rootLogger", "INFO, stdout");
-            System.setProperty("log4j.appender.stdout", "org.apache.log4j.ConsoleAppender");
-            System.setProperty("log4j.appender.stdout.layout", "org.apache.log4j.PatternLayout");
-
-            System.setProperty("log4j.logger.httpclient.wire.header", "");
-            System.setProperty("log4j.logger.httpclient.wire", "");
-            System.setProperty("log4j.logger.org.apache.commons.httpclient", "");
-*/
-
-
             PropertyConfigurator.configure(System.getProperties());
             ArgumentProcessor processor = new ArgumentProcessor(args);
             Configuration configuration = processor.getConfiguration();
