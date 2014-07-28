@@ -56,8 +56,8 @@ public class Main {
         try {
             doMain(args);
         } catch (Throwable t) {
-//            throw ThrowUtil.deepSanitize(t);
-            throw t;
+            throw ThrowUtil.deepSanitize(t);
+//            throw t;
         }
     }
 
