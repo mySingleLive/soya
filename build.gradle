@@ -51,6 +51,7 @@ repositories{
     mavenCentral();
 }
 
+
 ext.antlrVersion = '2.7.7'
 ext.antAntlrVersion = '1.8.4'
 ext.commonEmailVersion = '1.1'
@@ -110,7 +111,7 @@ configurations {
     jaxDoclet
 }
 
-def soyaVersion = '1.0'
+def soyaVersion = '1.0.1-alpha'
 
 def soyaMainClass = 'org.soya.main.SoyaMain'
 
@@ -238,6 +239,13 @@ task installSoya(type: Sync) {
     dependsOn copyBin
     dependsOn copyDoc
     dependsOn copySample
+}
+
+
+task dist(type: Zip) {
+    dependsOn installSoya
+    from "$installDir"
+    into "soya-${soyaVersion}"
 }
 
 
