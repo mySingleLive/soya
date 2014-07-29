@@ -54,7 +54,7 @@ RCURLY_DOT_LCURLY; RCURLY_DOT_DATE; RCURLY_DOT_DATE_DOT; RCURLY_DOT_DATE_DOT_LCU
 STATEMENTS; HASH; HASH_ENTRY; DATE_TIME; U_MINUS; U_PLUS; PAIR_CONSTRUCTOR; LIST; STAR_LIST; ARG_LIST;
 METHOD_CALL; INDEX_OP; MATCH_ATTR; MATCH_VAR_DEF; BLOCK; CALL_BLOCK; POSTFIX; POST_INC; POST_DEC;
 ASSERT; IF; FOR; PARAM; PARAM_LIST; METHOD_DEF; CONSTRUCTOR_DEF; CLOSURE; ALIAS; THROW;
-NEW; MATCH; MATCH_ITEM; MATCH_ELSE_ITEM; MATCH_BLOCK; EXTENDS_TYPE; TRY; CATCH; FIELD;
+NEW; MATCH; MATCH_ITEM; MATCH_ELSE_ITEM; MATCH_BLOCK; EXTENDS_TYPE; TRY; CATCH; FIELD; PATTERN_GROUP;
 CATCH_LIST; NAMED_ARG; ANNOTATION_FIELD; TYPE; CLASS_STATEMENTS; CLASS_BLOCK; CLASS; MODIFIERS;
 IMPORT; ANNOTATION; ANNOTATION_LIST; COMPILATION_UNIT; START_TAG; TAG_ATTR; TAG_ATTR_LIST; END_TAG;
 TAG_CONTENT; TAG; TAG_TEXT; MARKUP; PACKAGE; SUPER_COTR_CALL;
@@ -1579,6 +1579,11 @@ argument!
         {
             #argument = #(node(NAMED_ARG, "NAMED_ARG", first, LT(1)), #en);
         }
+    |   (ID nls (ID | literal) nls (ID | literal)) => pga:patternGroupArgument
+        {
+            //System.out.println("HHHHHHHH~~~");
+            #argument = #pga;
+        }
 	|	expr:expression
 	    (
 	         n:ID
@@ -1590,6 +1595,21 @@ argument!
         	    #argument = #expr;
         	 }
 	    )
+	;
+
+
+patternGroupArgument
+{
+    Token first = LT(1);
+}
+	:   id:ID
+        (   options { greedy = true; } :
+            (nls (ID | literal)) =>
+            nls! (ID | literal)
+	    )+
+	    {
+            #patternGroupArgument = #(node(PATTERN_GROUP, "PATTERN_GROUP", first, LT(1)), patternGroupArgument);
+	    }
 	;
 
 idChain!
