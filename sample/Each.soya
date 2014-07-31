@@ -20,7 +20,7 @@ table.each(name: $n) {
    println(n)
 }
 
-println('-------')
+println('-----------')
 
 table.each(id: 11.. $id, name: /(\w){3,}/ $n2) {
    println("{id}: {n2}")
