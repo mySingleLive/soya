@@ -2023,18 +2023,42 @@ public class WriterVisitor {
     }
 
     public void visitAndCommand(Expression leftExpr, Expression rightExpr) {
-        pushShell();
-        visitExpression(leftExpr);
-        visitExpression(rightExpr);
-        ga.invokeVirtual(TypeUtil.P_SHELL_TYPE, MethodUtil.AND_COMMAND);
+        Label falselb = new Label();
+        Label endlb = new Label();
+
+        jumpIfFalse(leftExpr, falselb);
+
+        jumpIfFalse(rightExpr, falselb);
+
+        ga.push(true);
+        ga.goTo(endlb);
+
+        ga.visitLabel(falselb);
+        ga.push(false);
+
+        ga.visitLabel(endlb);
         ga.box(TypeUtil.getType(boolean.class));
     }
 
     public void visitOrCommand(Expression leftExpr, Expression rightExpr) {
-        pushShell();
-        visitExpression(leftExpr);
-        visitExpression(rightExpr);
-        ga.invokeVirtual(TypeUtil.P_SHELL_TYPE, MethodUtil.OR_COMMAND);
+        Label lftlb = new Label();
+        Label rgtlb = new Label();
+        Label endlb = new Label();
+
+        jumpIfFalse(leftExpr, lftlb);
+        ga.push(true);
+        ga.goTo(endlb);
+        ga.visitLabel(lftlb);
+
+        jumpIfFalse(rightExpr, rgtlb);
+        ga.push(true);
+        ga.goTo(endlb);
+
+        ga.visitLabel(rgtlb);
+        ga.push(false);
+        ga.goTo(endlb);
+
+        ga.visitLabel(endlb);
         ga.box(TypeUtil.getType(boolean.class));
     }
 
