@@ -53,6 +53,14 @@ idea {
                     [
                         name: 'do Closure',
                         param: 'sample/Closure.soya'
+                    ],
+                    [
+                        name: 'do Each',
+                        param: 'sample/Each.soya'
+                    ],
+                    [
+                        name: 'do QuickSort',
+                        param: 'sample/QuickSort.soya'
                     ]
                 ]
 
