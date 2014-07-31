@@ -939,6 +939,7 @@ public class SoyaASTProcessor {
                 break;
             case THIS:
             case SUPER:
+            case DOLLAR_ID:
             case ID:
                 expression = identifier(cst);
                 break;
@@ -947,6 +948,9 @@ public class SoyaASTProcessor {
                 break;
             case REFRENCE_NAME:
                 expression = referenceExpression(cst);
+                break;
+            case PATTERN_GROUP:
+                expression = patternGroupExpression(cst);
                 break;
             case ASSIGN:
             case PLUS_ASSIGN:
@@ -1738,9 +1742,19 @@ public class SoyaASTProcessor {
     protected MatchVarDefExpression matchVarDef(AST cst) throws SyntaxException {
 //        assertCSTType(cst, MATCH_VAR_DEF);
         AST child = cst.getFirstChild();
-        Expression expr = expression(child);
-        child = child.getNextSibling();
-        MatchVarDefExpression matchVarDefExpression = new MatchVarDefExpression(child.getText(), expr);
+        Expression expr = null;
+        String name = null;
+
+        if (child.getType() == DOLLAR_ID) {
+            expr = new PatternExpression(ClassNode.OBJECT);
+            name = child.getText();
+        }
+        else {
+            expr = expression(child);
+            child = child.getNextSibling();
+            name = child.getText();
+        }
+        MatchVarDefExpression matchVarDefExpression = new MatchVarDefExpression(name, expr);
         return matchVarDefExpression;
     }
 
@@ -1754,6 +1768,39 @@ public class SoyaASTProcessor {
     protected VariableExpression variableExpression(AST cst) {
         VariableExpression variableExresspion = new VariableExpression(cst.getText());
         return variableExresspion;
+    }
+
+    protected Expression patternGroupExpression(AST cst) throws SyntaxException {
+        assertCSTType(cst, PATTERN_GROUP);
+        List<Expression> patterns = new ArrayList<Expression>();
+        Expression last = null;
+        for (AST child = cst.getFirstChild(); child != null; child = child.getNextSibling()) {
+            Expression expression = expression(child);
+            patterns.add(expression);
+            if (child.getNextSibling() == null) {
+                last = expression;
+            }
+        }
+        if (last != null) {
+            if (last instanceof VariableExpression) {
+                patterns.remove(last);
+                MatchVarDefExpression matchVarDefExpression = new MatchVarDefExpression(
+                        ((VariableExpression) last).getVariableName(),
+                        new PatternGroupExpression(patterns));
+                return matchVarDefExpression;
+            }
+            if (last instanceof MatchVarDefExpression) {
+                MatchVarDefExpression matchVarDefExpression = (MatchVarDefExpression) last;
+                patterns.remove(last);
+                patterns.add(matchVarDefExpression.getExpression());
+                matchVarDefExpression = new MatchVarDefExpression(
+                        ((MatchVarDefExpression) last).getName(),
+                        new PatternGroupExpression(patterns));
+                return matchVarDefExpression;
+            }
+        }
+        PatternGroupExpression patternGroupExpression = new PatternGroupExpression(patterns);
+        return patternGroupExpression;
     }
 
     protected OperationExpression operationExpression(AST cst) throws SyntaxException {

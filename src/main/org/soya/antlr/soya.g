@@ -27,7 +27,7 @@ options {
 tokens {
 INDENT; DEDENT; INTEGER;
 ID; ID_LPAREN; URL; STRING_PART; STR_TQ_START; STR_SQ_START; STR_PART_MIDDLE; STR_PART_END;
-REGEX_NUM_PART; REGEX_START; REGEX_END; REGEX_MIDDLE; REGEX_CONSTRUCTIOR;
+REGEX_NUM_PART; REGEX_START; REGEX_END; REGEX_MIDDLE; REGEX_CONSTRUCTIOR; DOLLAR_ID;
 FILE_PATH; FILE_PATH_START; FILE_PATH_MIDDLE; FILE_PATH_END; FILE_CONSTRUCTOR;
 LPAREN; RPAREN; LBRACK; RBRACK; STRING_CONSTRUCTOR;  LCURLY; RCURLY; EMAIL; TIME; LIST_PREFIX;
 PERCENTAGE; NLS; FLOAT; PAIR; DATE; PAIR_LCURLY; WELL_LCURLY; RCURLY_X_PAIR; RCURLY_X_PAIR_LCURLY;
@@ -892,12 +892,30 @@ matchAndExpression
 {
    Token first = LT(1);
 }
-    :   left:logicalOrExpression
+    :   left:patternGroupExpression
         (
             MAND^ nls!
-            logicalOrExpression
+            patternGroupExpression
         )*
     ;
+
+patternGroupExpression
+{
+    Token first = LT(1);
+}
+	:   le:logicalOrExpression
+	    (
+	        (nls logicalOrExpression) =>
+            (   options { greedy = true; } :
+                expression
+            )+
+            {
+                #patternGroupExpression = #(node(PATTERN_GROUP, "PATTERN_GROUP", first, LT(1)), patternGroupExpression);
+            }
+        |   { #patternGroupExpression = #le; }
+	    )
+	;
+
 
 
 logicalOrExpression
@@ -1579,14 +1597,13 @@ argument!
         {
             #argument = #(node(NAMED_ARG, "NAMED_ARG", first, LT(1)), #en);
         }
-    |   (ID nls (ID | literal) nls (ID | literal)) => pga:patternGroupArgument
+    |   di:DOLLAR_ID
         {
-            //System.out.println("HHHHHHHH~~~");
-            #argument = #pga;
+            #argument = #(node(MATCH_VAR_DEF, "MATCH_VAR_DEF", first, LT(1)), di);
         }
 	|	expr:expression
 	    (
-	         n:ID
+	         n:DOLLAR_ID
 	         {
                 #argument = #(node(MATCH_VAR_DEF, "MATCH_VAR_DEF", first, LT(1)), expr, n);
 	         }
@@ -1602,10 +1619,10 @@ patternGroupArgument
 {
     Token first = LT(1);
 }
-	:   id:ID
+	:   expression
         (   options { greedy = true; } :
-            (nls (ID | literal)) =>
-            nls! (ID | literal)
+            (nls expression) =>
+            nls! expression
 	    )+
 	    {
             #patternGroupArgument = #(node(PATTERN_GROUP, "PATTERN_GROUP", first, LT(1)), patternGroupArgument);
@@ -2357,6 +2374,12 @@ options {
   	}
 	;
 
+
+DOLLAR_ID
+	:   '$'! (LETTER | '_') (LETTER | '_' | DIGIT)*
+	;
+
+
 RFC822
     :   "GMT"
     |   "UTC"
@@ -2657,7 +2680,7 @@ REGEX
                 {tt == REGEX_NUM_PART}?
                 (
                     {tt == REGEX_NUM_PART}?
-                    tt=REGEX_PART[false, true]
+                    tt=REGEX_PART[true, true]
                 )+
             |
             )
@@ -2687,7 +2710,7 @@ returns [int tt = REGEX_END]
     boolean multiCurly = false;
 }
     :  (
-          {start}? REGEX_START_CHAR
+          {start && !number}? REGEX_START_CHAR
        )?
        (
            options { greedy = true; }:
@@ -2702,12 +2725,12 @@ returns [int tt = REGEX_END]
                if (c == '{') {
                    testCount = true;
                }
-               if (!testCount && Character.isDigit(c)) {
+               if (!testCount && Character.isDigit(c) || c == ',') {
                    do {
                        i++;
                        c = LA(i);
-                   } while (Character.isDigit(c));
-                   if (c == '}') {
+                   } while (Character.isDigit(c) || c == ',');
+                   if (c == '}' || c == '{') {
                        testCount = true;
                    }
                }
@@ -2745,7 +2768,7 @@ returns [int tt = REGEX_END]
                 }
            )
        )
-       { $setType(tt); }
+       { $setType(tt);}
     ;
 
 

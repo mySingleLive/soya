@@ -427,11 +427,11 @@ range.each {
 }
 
 
-range.each(Index i) {
+range.each(Index $i) {
    assert range.get(i) == it
 }
 
-range.each(_ ri, Index i) {
+range.each($ri, Index $i) {
    assert range.get(i) == ri
 }
 
@@ -571,7 +571,7 @@ assert b == [67]
 
 
 b = []
-a.each(String s, Index i) {
+a.each(String $s, Index $i) {
    b << s + i
 }
 
@@ -672,23 +672,23 @@ assert a["{x}"] == 24
 
 // each
 
-a.each(Key key) {
+a.each(Key $key) {
     assert a[key] == it
 }
 
-a.each(Key key, _ o) {
+a.each(Key $key, $o) {
     assert a[key] == o
 }
 
-a.each(int n) {
+a.each(int $n) {
     assert n is (24 | 32)
 }
 
-a.each(Key key, String s) {
+a.each(Key $key, String $s) {
     assert s == 'Peter'
 }
 
-a.each(_ o, Key key) {
+a.each($o, Key $key) {
     assert a[key] == o
 }
 

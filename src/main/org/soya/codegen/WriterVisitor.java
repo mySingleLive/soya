@@ -717,6 +717,9 @@ public class WriterVisitor {
         else if (expression instanceof PropertyExpression) {
         	visitPropertyExpression((PropertyExpression) expression);
         }
+        else if (expression instanceof PatternGroupExpression) {
+            visitPatternGroupExpression((PatternGroupExpression) expression);
+        }
         else if (expression instanceof OperationExpression) {
             visitOperationExpression((OperationExpression) expression);
         }
@@ -1047,7 +1050,7 @@ public class WriterVisitor {
         else {
             ga.newInstance(TypeUtil.P_OBJECT_PATTERN_TYPE);
             ga.dup();
-            visitIndexExpression((IndexExpression) expr);
+            visitExpression(expr);
             ga.push(alias);
             stackFrame.getSymbolTable().getVariableWriter().loadVarScopeFromLocal(this);
             ga.invokeConstructor(TypeUtil.P_OBJECT_PATTERN_TYPE, MethodUtil.getConstructorMethod(new ClassNode[] {
@@ -1430,6 +1433,35 @@ public class WriterVisitor {
         }
         else {
         	invokeDynamicMethod(null, null, varName, false, null);
+        }
+    }
+
+    public void visitPatternGroupExpression(PatternGroupExpression expression) {
+        List<Expression> patterns = expression.getExpressions();
+        if (patterns.size() == 1) {
+            visitExpression(patterns.get(0));
+        }
+        else if (patterns.size() > 1) {
+            OperationExpression operationExpression = null;
+            SoyaToken opt = new SoyaToken(MAND);
+            for (int i = 0 ; i < patterns.size(); i++) {
+                Expression pattern = patterns.get(i);
+                if (operationExpression == null) {
+                    i++;
+                    Expression pattern2 = patterns.get(i);
+                    operationExpression = new OperationExpression(opt, pattern, pattern2);
+                }
+                else {
+                    operationExpression = new OperationExpression(opt, operationExpression, pattern);
+                }
+            }
+            String alias = expression.getAlias();
+            if (expression.isArgument() && alias != null) {
+                visitMatchVarDefExpression(new MatchVarDefExpression(alias, new PatternGroupExpression(patterns)));
+            }
+            else {
+                visitOperationExpression(operationExpression);
+            }
         }
     }
 

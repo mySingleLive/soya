@@ -8,6 +8,8 @@ import java.util.List;
 public class PatternGroupExpression extends Expression {
 
     private List<Expression> expressions;
+    private boolean argument = false;
+    private String alias;
 
     public PatternGroupExpression(List<Expression> expressions) {
         this.expressions = expressions;
@@ -15,6 +17,22 @@ public class PatternGroupExpression extends Expression {
 
     public List<Expression> getExpressions() {
         return expressions;
+    }
+
+    public boolean isArgument() {
+        return argument;
+    }
+
+    public void setArgument(boolean argument) {
+        this.argument = argument;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
     @Override
