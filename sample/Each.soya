@@ -1,15 +1,4 @@
 
-/*
-i := 0
-
-list := [2, 3, 5, 6]
-
-list.each {
-   i += it
-}
-
-println(i)
-*/
 
 table :=
    * id: 3
@@ -27,10 +16,15 @@ table :=
    * id: 12
      name: 'HHHHH'
 
-
-
-table.each(id: $id, name: /(\w){3}/ $n) {
-   println("{id}, {n}")
+table.each(name: $n) {
+   println(n)
 }
+
+println('-------')
+
+table.each(id: 11.. $id, name: /(\w){3,}/ $n2) {
+   println("{id}: {n2}")
+}
+
 
 
