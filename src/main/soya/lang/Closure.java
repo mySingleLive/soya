@@ -3,10 +3,12 @@ package soya.lang;
 import org.soya.runtime.InvokeUtil;
 import org.soya.runtime.VarScope;
 
+import java.io.Serializable;
+
 /**
  * @author: Jun Gong
  */
-public abstract class Closure extends EvalObject implements Caller {
+public abstract class Closure extends EvalObject implements Caller, Serializable {
 	public VarScope externalVariables;
     public boolean callOnAssign = false;
     private Object object;
