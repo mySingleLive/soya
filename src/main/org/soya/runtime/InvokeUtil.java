@@ -48,6 +48,15 @@ public class InvokeUtil {
         return false;
     }
 
+
+    public static int intValue(Integer o) {
+        return ((Integer) o).intValue();
+    }
+
+    public static int intValue(Int o) {
+        return ((Int) o).getValue();
+    }
+
     public static Object invokeStaticMethod(Class invokerClass, Class clazz, String methodName, Object[] argObjs) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         Method method = findJavaMethod(invokerClass, clazz.getDeclaredMethods(), methodName, argObjs, true);
         if (method != null) {
