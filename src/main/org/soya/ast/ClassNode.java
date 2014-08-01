@@ -4,13 +4,14 @@ package org.soya.ast;
 import org.objectweb.asm.Opcodes;
 import org.soya.ast.expr.MatchExpression;
 import org.soya.runtime.SoyaShell;
-import soya.lang.*;
 import org.soya.runtime.VarScope;
 import org.soya.util.NameUtil;
+import soya.lang.*;
 import soya.lang.Float;
 import soya.util.pattern.*;
 
 import java.io.File;
+import java.lang.Number;
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Retention;
 import java.lang.reflect.Constructor;
@@ -89,6 +90,9 @@ public class ClassNode extends AnnotatedNode {
     public static ClassNode SHELL = new ClassNode(SoyaShell.class, POBJECT);
     public static ClassNode PINDEX = new ClassNode(Index.class, POBJECT);
     public static ClassNode PKEY = new ClassNode(Key.class, POBJECT);
+    public static ClassNode POdd = new ClassNode(Odd.class);
+    public static ClassNode PNegative = new ClassNode(Negative.class);
+    public static ClassNode PDecimal = new ClassNode(Decimal.class);
 
 
     public static ClassNode[] classes = new ClassNode[] {

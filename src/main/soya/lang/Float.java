@@ -230,4 +230,19 @@ public class Float extends AbstractObject implements Comparable {
         return value <= d;
     }
 
+    public int intValue() {
+        return (int) getValue();
+    }
+
+    public long longValue() {
+        return (long) getValue();
+    }
+
+    public float floatValue() {
+        return (float) getValue();
+    }
+
+    public double doubleValue() {
+        return getValue();
+    }
 }

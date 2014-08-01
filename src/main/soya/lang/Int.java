@@ -293,4 +293,19 @@ public class Int extends AbstractObject implements Comparable, Pattern {
         return value | i;
     }
 
+    public int intValue() {
+        return getValue();
+    }
+
+    public long longValue() {
+        return getValue();
+    }
+
+    public float floatValue() {
+        return getValue();
+    }
+
+    public double doubleValue() {
+        return getValue();
+    }
 }

@@ -59,6 +59,9 @@ public class CompilationUnit extends TreeNode {
         addImport(new ImportNode(ClassNode.OVERRIDE, "Override"));
         addImport(new ImportNode(ClassNode.PINDEX, "Index"));
         addImport(new ImportNode(ClassNode.PKEY, "Key"));
+        addImport(new ImportNode(ClassNode.POdd, "Odd"));
+        addImport(new ImportNode(ClassNode.PNegative, "Negative"));
+        addImport(new ImportNode(ClassNode.PDecimal, "Decimal"));
         addStarImport(new ImportNode("java.lang"));
         addStarImport(new ImportNode("java.io"));
         addStarImport(new ImportNode("java.math"));
