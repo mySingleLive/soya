@@ -30,6 +30,12 @@ public class UnaryExpression extends Expression {
         this.expression = expression;
     }
 
+
+    @Override
+    public boolean findVarReference(String varName) {
+        return expression.findVarReference(varName);
+    }
+
     public String toString() {
         return operator.getText() + " " + expression;
     }

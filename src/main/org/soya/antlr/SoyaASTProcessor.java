@@ -1264,7 +1264,7 @@ public class SoyaASTProcessor {
     protected MethodCallExpression methodCallExpression(AST cst) throws SyntaxException {
         AST child = cst.getFirstChild();
         int type = child.getType();
-        if (type == ID) {
+        if (type == ID || type == ID_LPAREN) {
             String methodName = child.getText();
             ConstantExpression method = new ConstantExpression(methodName);
             VariableExpression obj = null;

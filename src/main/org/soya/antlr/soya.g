@@ -1128,18 +1128,26 @@ pathElement[AST prefix]
 	:	(pathSymbol) => (
 			sym:pathSymbol
 			nls!
-			el:namePart
-			{
-				symbol = #sym;
-				#pathElement = #(node(symbol.getType(), symbol.getText(), prefix, LT(1)), prefix, el);
-			}
+			(
+                (ID_LPAREN) => (
+                   micp:methodCallWithIDParen[prefix]
+                   {
+                       #pathElement = #micp;
+                   }
+                )
+            |   el:namePart
+                {
+                    symbol = #sym;
+                    #pathElement = #(node(symbol.getType(), symbol.getText(), prefix, LT(1)), prefix, el);
+                }
+			)
 		)
-    |	(LPAREN) => (
+    /*|	(LPAREN) => (
 			mcp:methodCallWithParen[prefix]
             {
 				#pathElement = #mcp;
 			}
-		)
+		)*/
     |   cblk:callBlockExpression[prefix]
         {
             //System.out.println("Call Closure");
@@ -1239,6 +1247,7 @@ keywordAsMethodName
 
 primaryExpression
 	:	(hashMapEntryStart) => hashMapWithoutBoundary
+	|   (ID_LPAREN) => methodCallWithIDParen[null]
 	|   hashMapConstructExpression
 	|   literal
 	|   closureExpression
@@ -1558,6 +1567,22 @@ starListItem
 identifier
 	:	ID
 	;
+
+methodCallWithIDParen[AST caller]
+	:	idp:ID_LPAREN nls!
+		(al:argList!)? nls!
+		rp:RPAREN!
+		{
+		    if (caller != null) {
+                caller = #(node(DOT, ".", caller, LT(1)), caller, #idp);
+                #methodCallWithIDParen = #(node(METHOD_CALL, "METHOD_CALL", caller.getFirstChild(), LT(1)), caller, #al);
+			}
+			else {
+                #methodCallWithIDParen = #(node(METHOD_CALL, "METHOD_CALL", idp, LT(1)), #idp, #al);
+			}
+		}
+	;
+
 
 methodCallWithParen[AST callee]
 	:	LPAREN! nls!
@@ -2218,10 +2243,10 @@ options {
 		  			_ttype = URL;
 		  		}
 		  	)?
-	  	/*|	'('
+	  	|	'('!
 	  		{
 	  			_ttype = ID_LPAREN;
-	  		}*/
+	  		}
 	  	)?
 	  	{
 			allowFilePath = false;
