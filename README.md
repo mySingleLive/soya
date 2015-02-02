@@ -37,6 +37,10 @@ To build from Eclipse:
 
 Then import the generated project in Eclipse.
 
+### How to contribute
+Forking and sending a pull request: https://github.com/mySingleLive/soya
+Discussion: https://github.com/mySingleLive/soya/issues
+
 ### License (BSD License)
 Copyright (c) 2013-2014 Jun Gong
 
