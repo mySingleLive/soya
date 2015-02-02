@@ -39,6 +39,7 @@ Then import the generated project in Eclipse.
 
 ### How to contribute
 Forking and sending a pull request: https://github.com/mySingleLive/soya.
+
 Discussion: https://github.com/mySingleLive/soya/issues.
 
 ### License (BSD License)
