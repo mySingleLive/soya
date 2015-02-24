@@ -1,13 +1,13 @@
 
 
-println('test closure')
+//println('test closure')
 
 f := #(a, b) {a + b}
 
 println(f.numberOfParameters)
-println(f.class.methods[_[name: /(\w)*call/]])
+println(f(2, 5))
 
-/*
+
 x := 1
 f1 := #{
   x *= 2
@@ -17,4 +17,3 @@ f1()
 
 println(f1.numberOfParameters)
 println("x = {x}")
-*/
