@@ -1,12 +1,11 @@
 
 
-log.info('test closure')
+println('test closure')
 
 f := #(a, b) {a + b}
 
 println(f.numberOfParameters)
 println(f(2, 5))
-
 
 x := 1
 f1 := #{
