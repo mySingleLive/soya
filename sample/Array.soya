@@ -1,7 +1,7 @@
 
-ary0 := [2, 5, 7, 10, 43, 'ok', 1, 'no']
+ary1 := [2, 5, 7, 10, 43, 'ok', 1, 'no']
 
-ary1 :=
+ary2 :=
    * 1
      2
      9
@@ -35,27 +35,28 @@ tb :=
    * a: 34
      b: 10
      'abc'
-     a: 32
+   * a: 32
      b: 70
    * a: 34
      b: -23
 
 
-println(ary0)
 println(ary1)
+println(ary2)
 println(m1)
 println(m2)
 println(tb)
 
 println('-----------------------------------------')
 
-println(ary0[10..100])
-println(ary0[String])
+println(ary1[10..100])
+println(ary1[String])
 println(tb[1][String])
+println(tb[b: 70])
 
 println('-----------------------------------------')
 
-ary0[1..<10] = 0
-println(ary0)
-ary0.each(0) = 'Zero'
-println(ary0)
+ary1[1..<10] = 0
+println(ary1)
+ary1.each(0) = 'Zero'
+println(ary1)
