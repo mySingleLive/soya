@@ -34,10 +34,9 @@ tb :=
      b: 43
    * a: 34
      b: 10
-     'abc'
    * a: 32
      b: 70
-   * a: 34
+   * a: 58
      b: -23
 
 
@@ -51,8 +50,8 @@ println('-----------------------------------------')
 
 println(ary1[10..100])
 println(ary1[String])
-println(tb[1][String])
-println(tb[b: 70])
+println(tb[a: 34])
+println(tb[b: ..<0])
 
 println('-----------------------------------------')
 
