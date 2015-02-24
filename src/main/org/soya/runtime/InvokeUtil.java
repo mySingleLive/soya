@@ -7,10 +7,7 @@ import soya.lang.Float;
 
 import java.io.File;
 import java.lang.Long;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.net.URL;
 import java.util.*;
 
@@ -301,6 +298,7 @@ public class InvokeUtil {
         Class[] argTypes = getObjectClasses(argObjs);
         Class[] methodTypes = null;
         SortedMethod sortedMethod = null;
+        Method varMethod = null;
         for (int i = 0; i < methods.length; i++) {
             method = methods[i];
             if (method.getName().equals(methodName)) {
@@ -313,6 +311,9 @@ public class InvokeUtil {
                         break;
                     }
                 }
+                if (method.isVarArgs()) {
+                    varMethod = method;
+                }
             }
             if (i == methods.length - 1) {
                 method = null;
@@ -320,6 +321,9 @@ public class InvokeUtil {
         }
         if (sortedMethod != null) {
             return sortedMethod.method;
+        }
+        if (method == null) {
+            return varMethod;
         }
         return method;
     }
@@ -354,7 +358,12 @@ public class InvokeUtil {
         }
         Class[] methodTypes = method.getParameterTypes();
         if (argArray == null) {
-            argArray = makeUnboxedArray(methodTypes, argObjs);
+            if (method.isVarArgs()) {
+                argArray = makeVarArgUnboxedArray(methodTypes, argObjs);
+            }
+            else {
+                argArray = makeUnboxedArray(methodTypes, argObjs);
+            }
         }
         return new Object[] {method, argArray};
     }
@@ -412,9 +421,11 @@ public class InvokeUtil {
 
 
     public static Object transformToJavaObject(Class targetType, Object obj) {
-        if (targetType.isAssignableFrom(obj.getClass())) {
+/*
+        if (obj.getClass().equals(targetType)) {
             return obj;
         }
+*/
         if (obj instanceof Null) {
             return null;
         }
@@ -546,6 +557,29 @@ public class InvokeUtil {
         }
         return results;
     }
+
+
+    public static Object[] makeVarArgUnboxedArray(Class[] targetTypes, Object[] args) {
+        if (args.length == 1 && args[0] instanceof Tuple) {
+            args = ((Tuple) args[0]).toArray();
+        }
+        Object[] results = new Object[targetTypes.length];
+        for (int i = 0; i < targetTypes.length; i++) {
+            if (i < targetTypes.length - 1) {
+                results[i] = transformToJavaObject(targetTypes[i], args[i]);
+            }
+            else {
+                int len = args.length - (targetTypes.length - 1);
+                Object[] varRets =  new Object[len];
+                for (int j = 0; j < len; j++) {
+                    varRets[j] = transformToJavaObject(targetTypes[i], args[i + j]);
+                }
+                results[i] = varRets;
+            }
+        }
+        return results;
+    }
+
 
     public static boolean matchPoJoMethodParameterType(Class pType, Class aType) {
         if (pType.isAssignableFrom(aType)) {
