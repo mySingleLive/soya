@@ -47,13 +47,15 @@ println(m1)
 println(m2)
 println(tb)
 
-println('-------------------------')
+println('-----------------------------------------')
 
 println(ary0[10..100])
 println(ary0[String])
 println(tb[1][String])
 
-println('-------------------------')
+println('-----------------------------------------')
 
 ary0[1..<10] = 0
+println(ary0)
+ary0.each(0) = 'Zero'
 println(ary0)
