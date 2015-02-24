@@ -1,6 +1,6 @@
 
 
-//println('test closure')
+log.info('test closure')
 
 f := #(a, b) {a + b}
 
