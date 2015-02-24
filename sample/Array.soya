@@ -30,14 +30,14 @@ m2 :=
    * 3,  23, 21
 
 tb :=
-   * a: 21
-     b: 43
-   * a: 34
-     b: 10
-   * a: 32
-     b: 70
-   * a: 58
-     b: -23
+   * id:    21
+     val:   43
+   * id:    34
+     val:   10
+   * id:    32
+     val:   70
+   * id:    58
+     val:  -23
 
 
 println(ary1)
@@ -50,8 +50,8 @@ println('-----------------------------------------')
 
 println(ary1[10..100])
 println(ary1[String])
-println(tb[a: 34])
-println(tb[b: ..<0])
+println(tb[id: 34])
+println(tb[val: ..<0])
 
 println('-----------------------------------------')
 
