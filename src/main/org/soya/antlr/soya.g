@@ -1,3 +1,11 @@
+
+/**
+ * soya.g: Paser and Lexer of Soya
+ *
+ * See Copyright Notice in LICENSE file
+*/
+
+
 header {
 package org.soya.antlr.parser;
 import java.util.*;
