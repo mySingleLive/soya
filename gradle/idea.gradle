@@ -55,6 +55,10 @@ idea {
                         param: 'sample/Closure.soya'
                     ],
                     [
+                        name: 'do Exception',
+                        param: 'sample/Exception.soya'
+                    ],
+                    [
                         name: 'do Each',
                         param: 'sample/Each.soya'
                     ],
