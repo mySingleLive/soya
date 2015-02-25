@@ -375,8 +375,10 @@ public class SoyaList extends EvalObject implements List, Pattern, SoyaCollectio
         List results = new SoyaList();
         for (int i = 0; i < len; i++) {
             Object obj = get(i);
-            if (PatternUtil.isMatch(obj, pattern)) {
-                results.add(obj);
+            if (obj != null) {
+                if (PatternUtil.isMatch(obj, pattern)) {
+                    results.add(obj);
+                }
             }
         }
         return results;
