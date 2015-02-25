@@ -1,0 +1,9 @@
+
+
+
+try {
+   throw new java.lang.Exception('OK')
+}
+catch(e) {
+   println(e)
+}
