@@ -154,10 +154,10 @@ statement
     :   (methodStart) => (
             methodDeclarationStatement
         )
-    |   (annotationList nls K_CLASS) => (
+    |   (classStart) => (
             classDeclarationStatement
         )
-	|	methodDeclarationStatement
+    |   matchStatement
 	|   constructorCallStatement
 	//|   ifStatement
     |   forStatement
@@ -169,10 +169,8 @@ statement
     |   hashMapConstructExpression
     |   yamlHashStatement
     |   starListGroup
-    |   matchStatement
     |   matchBlock
     |   importStatement
-    |   classDeclarationStatement
     |   expressionStatement
 	;
 
@@ -422,6 +420,11 @@ methodStart
     :   (annotation)* nls (modifier)* nls DEF
     ;
 
+
+classStart
+    :   (annotation)* nls (K_PATTERN)? nls K_CLASS
+    ;
+
 constructStart
     :   (annotation)* nls (modifier)* nls K_INIT
     ;
@@ -508,26 +511,41 @@ methodDeclarationStatement!
         }
         mds:modifiers nls!
         DEF! nls!
-        mthName:ID! nls!
         (
-            LPAREN! nls!
+            mthName1:ID! nls!
             (
-                paramList1:parameterDefinitionList! nls!
+                LPAREN! nls!
+                (
+                    paramList1:parameterDefinitionList! nls!
+                )?
+                RPAREN!
+                {
+                    paramList = #paramList1;
+                }
+            |
+                paramList2:parameterDefinitionList! nls!
+                {
+                    paramList = #paramList2;
+                }
+            )?
+        |
+            mthName2:ID_LPAREN!
+            {
+                #mthName1 = #mthName2;
+            }
+            nls!
+            (
+                paramList3:parameterDefinitionList! nls!
             )?
             RPAREN!
             {
-                paramList = #paramList1;
+                paramList = #paramList3;
             }
-        |
-            paramList2:parameterDefinitionList! nls!
-            {
-                paramList = #paramList2;
-            }
-        )?
+        )
         body:methodBlockStatement!
         {
             #methodDeclarationStatement = #(node(METHOD_DEF, "METHOD_DEF", first, LT(1)),
-                 anns, mds, ty, mthName, paramList, body);
+                 anns, mds, ty, mthName1, paramList, body);
         }
     ;
 
@@ -1142,12 +1160,12 @@ pathElement[AST prefix]
                 }
 			)
 		)
-    /*|	(LPAREN) => (
+    |	(LPAREN) => (
 			mcp:methodCallWithParen[prefix]
             {
 				#pathElement = #mcp;
 			}
-		)*/
+		)
     |   cblk:callBlockExpression[prefix]
         {
             //System.out.println("Call Closure");
@@ -2208,7 +2226,7 @@ options {
     paraphrase="an identifier";
     testLiterals=true;
 }
-	{boolean isEmail = false, isHasSepcialChar = false, isColon = false;}
+	{boolean isEmail = false, isHasSepcialChar = false, isColon = false, isKeyword = false;}
 	:	(LETTER | '_') (LETTER | '_' | DIGIT)*
 	  	{
 	  		char c = LA(1);
@@ -2243,10 +2261,14 @@ options {
 		  			_ttype = URL;
 		  		}
 		  	)?
-	  	|	'('!
-	  		{
-	  			_ttype = ID_LPAREN;
-	  		}
+		 /*
+	  	|
+            {literals.get(new ANTLRHashString(text.toString(), this)) == null}?
+            '('!
+            {
+                _ttype = ID_LPAREN;
+            }
+            */
 	  	)?
 	  	{
 			allowFilePath = false;
