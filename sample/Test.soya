@@ -193,7 +193,7 @@ assert if (x == 0) {'aaaa'} else {'a'}.length == 4
 
 startTest('match')
 
-match(0)
+match (0)
   | Integer -> assert true
   | _ -> assert false
 
@@ -352,7 +352,7 @@ try {
 
 
 try {
-   throw new java.lang.Exception('ABC')
+   throw new Exception('ABC')
 } catch(e) {
    e match
       | java.lang.Exception[message: 'ABC'] -> assert true
@@ -540,8 +540,8 @@ assert a.find(String) == ['a', 't']
 a = [2, 6, 'abc', 54, 'fgh', 34]
 assert a.find(/ab.*/ | (int & 30..)) == ['abc', 54, 34]
 assert a.find(#(x) {x > 50}) == [54]
-def gt54 (x) {x > 30}
-assert a.find(#gt54) == [54, 34]
+def gt30 (x) { x is Number && x > 30 }
+assert a.find(#gt30) == [54, 34]
 assert a.find {it <= 6} == [2, 6]
 
 // each
@@ -563,7 +563,7 @@ a.each(String) {
 assert b == ['ok', 'no']
 
 b = []
-a.each(#gt54) {
+a.each(#gt30) {
    b << it
 }
 assert b == [67]
