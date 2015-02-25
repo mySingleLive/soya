@@ -11,3 +11,10 @@ out/
 soya.iml
 soya.ipr
 soya.iws
+
+src/main/org/soya/antlr/parser/SoyaLexer.java
+src/main/org/soya/antlr/parser/SoyaLexer.smap
+src/main/org/soya/antlr/parser/SoyaParser.java
+src/main/org/soya/antlr/parser/SoyaParser.smap
+src/main/org/soya/antlr/parser/SoyaParserTokenTypes.java
+src/main/org/soya/antlr/parser/SoyaParserTokenTypes.txt
