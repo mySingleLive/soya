@@ -1,0 +1,13 @@
+# Created by .ignore support plugin (hsz.mobi)
+
+.git/
+
+.idea/
+
+build/
+
+out/
+
+soya.iml
+soya.ipr
+soya.iws
