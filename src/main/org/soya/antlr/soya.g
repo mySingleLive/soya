@@ -1,11 +1,4 @@
 
-/**
- * soya.g: Paser and Lexer of Soya
- *
- * See Copyright Notice in LICENSE file
-*/
-
-
 header {
 package org.soya.antlr.parser;
 import java.util.*;
@@ -22,7 +15,10 @@ import org.soya.antlr.SoyaToken;
 
 /**
  * Parser of Soya
- * @author: James Gong
+ *
+ * See Copyright Notice in LICENSE file
+ *
+ * @author: Jun Gong
  */
 class SoyaParser extends Parser;
 
@@ -1804,7 +1800,7 @@ nls!
 
 /**
  * Lexer of Soya
- * @author: James Gong
+ * @author: Jun Gong
  */
 class SoyaLexer extends Lexer;
 
