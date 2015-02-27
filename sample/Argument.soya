@@ -1,6 +1,15 @@
 
 
+
 println('test arguments')
 
 
-println(arguments.length)
+for (i := 0; i < arguments.length; i++) {
+    println(arguments[i])
+}
+
+
+args := [] + arguments
+args << "ok"
+
+println(args)

@@ -77,7 +77,8 @@ public class MetaClass extends EvalObject implements Pattern {
                     break;
                 }
             }
-            Object result = con.newInstance(InvokeUtil.makeUnboxedArray(paramTypes, args));
+            Object[] argArray = InvokeUtil.makeUnboxedArray(paramTypes, args);
+            Object result = con.newInstance(argArray);
             if (result instanceof AbstractObject) {
                 ((AbstractObject) result).setMetaClass(this);
             }
