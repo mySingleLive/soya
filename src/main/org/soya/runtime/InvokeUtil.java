@@ -412,7 +412,11 @@ public class InvokeUtil {
                     }
                 }
                 else {
-                    return invokeJavaObjectMethod(obj, NameUtil.toGetterName(methodName), argObjs);
+                    try {
+                        return getJavaObjectPropertyValue(obj.getClass(), obj, methodName);
+                    } catch (Throwable t4) {
+                        return invokeJavaObjectMethod(obj, NameUtil.toGetterName(methodName), argObjs);
+                    }
                 }
             }
             throw t;
