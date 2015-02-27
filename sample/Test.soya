@@ -947,8 +947,13 @@ assert file.extensionName == 'txt'
 
 // plus
 assert %/xx + '/foo.txt' == %/xx/foo.txt
-assert %/xx + %yy.txt == %/xx/yy.txt
-assert %xx + %yy + %foo.txt == %xx/yy/foo.txt
+assert %/xx + %/yy.txt == %/xx/yy.txt
+
+
+// div
+//assert %xx / 'yy.txt' == %xx/yy.txt
+//assert %xx / %yy / %foo.txt == %xx/yy/foo.txt
+
 
 file = %tmp_file.txt
 file << 'felo323\n'

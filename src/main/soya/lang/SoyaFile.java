@@ -369,11 +369,19 @@ public class SoyaFile extends EvalObject implements Serializable, Comparable, Re
     }
 
     public File plus(File f) {
+        return new File(file.getPath() + f.getPath());
+    }
+
+    public File div(String s) {
         String abpath = file.getAbsolutePath();
         char splitor = '/';
         if (abpath.indexOf('\\') > -1) {
             splitor = '\\';
         }
-        return new File(file.getPath() + splitor + f.getPath());
+        return new File(file.getPath() + splitor + s);
+    }
+
+    public File div(File f) {
+        return div(f.getPath());
     }
 }

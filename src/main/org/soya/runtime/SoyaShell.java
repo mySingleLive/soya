@@ -92,7 +92,7 @@ public class SoyaShell {
         Constructor cons = clazz.getConstructor();
         Script script = (Script) cons.newInstance();
         script.setMetaClass(MetaClassUtil.createMetaClass(clazz));
-        Object result = script.run(new Object[0]);
+        Object result = script.run(args);
     }
 
 
