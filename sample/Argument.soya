@@ -1,0 +1,6 @@
+
+
+println('test arguments')
+
+
+println(arguments.length)

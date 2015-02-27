@@ -47,6 +47,10 @@ idea {
                         param: 'sample/Array.soya'
                     ],
                     [
+                        name: 'do Argument',
+                        param: 'sample/Argument.soya test',
+                    ],
+                    [
                         name: 'do DateTime',
                         param: 'sample/DateTime.soya'
                     ],
