@@ -677,6 +677,12 @@ public class SoyaShell {
     }
 
     public Object index(Object obj, Object[] args) throws Throwable {
+        if (obj == null) {
+            return null;
+        }
+        if (obj.getClass().isArray() && args.length >= 1) {
+            return Array.get(obj, ((Int) args[0]).getValue());
+        }
         return InvokeUtil.invokeJavaObjectMethod(obj, "get", args);
     }
 

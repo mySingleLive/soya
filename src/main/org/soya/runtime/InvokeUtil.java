@@ -176,6 +176,11 @@ public class InvokeUtil {
         try {
             return clazz.getField(propertyName).get(obj);
         } catch (NoSuchFieldException ef) {
+            if (clazz.isArray()) {
+                if (propertyName.equals("length")) {
+                    return ((Object[]) obj).length;
+                }
+            }
             throw new NoSuchMethodException(obj.getClass() + "." + propertyName + "() or " +
                     obj.getClass() + "." + NameUtil.toGetterName(propertyName) + "()");
         }
