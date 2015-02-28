@@ -562,19 +562,15 @@ public class InvokeUtil {
         }
         Object[] results = new Object[args.length];
         for (int i = 0; i < args.length; i++) {
-            try {
-                Class t = Object.class;
-                if (targetTypes != null && targetTypes.length > i) {
-                    t = targetTypes[i];
-                    results[i] = transformToJavaObject(t, args[i]);
-                }
-                else {
-                    results[i] = args[i];
-                }
-
-            } catch (Throwable t) {
-                System.out.println(t);
+            Class t = Object.class;
+            if (targetTypes != null && targetTypes.length >= i) {
+                t = targetTypes[i];
+                results[i] = transformToJavaObject(t, args[i]);
             }
+            else {
+                results[i] = args[i];
+            }
+
         }
         return results;
     }
