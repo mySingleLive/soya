@@ -35,6 +35,17 @@ A more complex sample:
     // Peter
     // Scott
 
+    users.each {
+       match it
+         | age: 0..50   -> println("{it.name} is young")
+         | age: 50..100 ->  println("{it.name} is old")
+    }
+
+    // Output:
+    // Peter is young
+    // Marry is young
+    // Scott is old
+
 ### Build and Install
 To build everything using Gradle (the command below will download Gradle automatically, you do not need to download it first).
 
