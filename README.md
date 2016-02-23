@@ -19,6 +19,20 @@ Soya has some syntax like this:
     lst[int v] = v * 2
     println(lst)  // Output: [2, 6, "X", "X", 4, "X", 28]
 
+A more complex sample:
+
+    users :=
+       * name: 'Peter'
+         age: 16
+       * name: 'Marry'
+         age: 12
+       * name: 'Scott'
+         age: 15
+
+    println(users[age: 12>..])
+    // Output: [{"age": 16, "name": Peter}, {"age": 15, "name": Scott}]
+
+
 ### Build and Install
 To build everything using Gradle (the command below will download Gradle automatically, you do not need to download it first).
 
