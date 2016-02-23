@@ -29,10 +29,11 @@ A more complex sample:
        * name: 'Scott'
          age: 15
 
-    println(users[age: 14..20])
+    users[age: 14..20]*.name.each { println(it) }
 
-    // Output: [{"age": 16, "name": Peter}, {"age": 15, "name": Scott}]
-
+    // Output:
+    // Peter
+    // Scott
 
 ### Build and Install
 To build everything using Gradle (the command below will download Gradle automatically, you do not need to download it first).
