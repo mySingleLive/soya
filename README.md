@@ -29,7 +29,7 @@ A more complex sample:
        * name: 'Scott'
          age: 15
 
-    users[age: 14..20]*.name.each { println(it) }
+    users[age: 14..20].each { println(it.name) }
 
     // Output:
     // Peter
