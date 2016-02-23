@@ -14,7 +14,7 @@ Soya is a programming language running on JVM. It has following features:
 
 Soya has some syntax like this:
 
-    lst := [1, 3, 'f1', 'a2', 2, 'c', 14]
+    lst := [1, 3, 'Apple', 'Peter', 2, 'House', 14]
     lst[String] = 'X'
     lst[int v] = v * 2
     println(lst)  // Output: [2, 6, "X", "X", 4, "X", 28]
