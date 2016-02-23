@@ -15,7 +15,8 @@ Soya is a programming language running on JVM. It has following features:
 Soya has some syntax like this:
 
     lst := [1, 3, 'f1', 'a2', 2, 'c', 14]
-    lst[Integer[1..10]] = 0
+    lst.each(1..10) = 0
+    lst[int] = 1
     lst[String] = 'X'
 
 ### Build and Install
