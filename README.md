@@ -16,7 +16,7 @@ Soya has some syntax like this:
 
     lst := [1, 3, 'f1', 'a2', 2, 'c', 14]
     lst.each(1..10) = 0
-    lst.each(/(\w)+/) = 'x'
+    lst[String] = 'X'
 
 ### Build and Install
 To build everything using Gradle (the command below will download Gradle automatically, you do not need to download it first).
