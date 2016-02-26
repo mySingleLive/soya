@@ -73,6 +73,10 @@ dependencies {
     compile "antlr:antlr:${antlrVersion}"
     compile "org.apache.ant:ant-antlr:${antAntlrVersion}"
     compile "commons-email:commons-email:${commonEmailVersion}"
+    compile "org.apache.httpcomponents:httpcore:4.1.4"
+    compile "org.apache.httpcomponents:httpasyncclient:4.0.1"
+    compile "org.apache.httpcomponents:httpcore-nio:4.2-alpha3"
+
 
     testCompile "junit:junit:${junitVersion}"
 
