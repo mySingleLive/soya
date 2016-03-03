@@ -58,4 +58,47 @@ println('-----------------------------------------')
 ary1[1..<10] = 0
 println(ary1)
 ary1.each(0) = 'Zero'
+ary1[int v] = v + 1
 println(ary1)
+
+println('-----------------------------------------')
+
+
+lst := [1, 3, 'f1', 'a2', 2, 'c', 14]
+lst[String] = 'X'
+lst[int v] = v * 2
+println(lst)
+
+
+users :=
+   * name: 'Peter'
+     age: 16
+   * name: 'Marry'
+     age: 12
+   * name: 'Scott'
+     age: 78
+
+users[age: 14..100].each { println(it.name) }
+
+users.each {
+   match it
+     | age: 0..50   -> println("{it.name} is young")
+     | age: 50..100 ->  println("{it.name} is old")
+}
+
+
+
+send({
+   url: http://192.168.10.55:8080/activity/phh/userOrderList
+   type: 'POST'
+   header:
+       userId: 1
+       zjtoken: 'kfalfjaefleal'
+   body: """
+       { "page": 1, "pageSize": 10}
+   """
+   success: #(data) {
+       println('查询C端用户订单记录：')
+       println(data)
+   }
+})
