@@ -2,8 +2,6 @@ package org.soya.tools;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -23,14 +21,24 @@ public class Properties {
         return "soya";
     }
 
-    public static String getBuildDate() {
-        Date date = new Date();
-        DateFormat format = new SimpleDateFormat("MM.yyyy");
-        return format.format(date);
+    private static String getBuildYear() {
+        return "2016";
+    }
+
+    private static String getBuildMonth() {
+        return "03";
+    }
+
+    private static String getBuildDay() {
+        return "22";
+    }
+
+    private static String getBuildDate() {
+        return getBuildYear() + "." + getBuildMonth() + "." + getBuildDay();
     }
 
     public static String getCopyright() {
-        return "Copyright (c) 2013-" +  new SimpleDateFormat("yyyy").format(new Date()) + " Jun Gong";
+        return "Copyright (c) 2013-" + getBuildYear() + ", Jun Gong";
     }
 
     public static String getVersionString() {
