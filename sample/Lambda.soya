@@ -1,0 +1,10 @@
+
+println('test lambda')
+
+def add(a, b) {
+   a + b
+}
+
+f := #add
+
+println(f)

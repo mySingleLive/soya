@@ -78,7 +78,7 @@ users :=
    * name: 'Scott'
      age: 78
 
-users[age: 14..100].each { println(it.name) }
+users[age: 12>..].each { println(it.name) }
 
 users.each {
    match it

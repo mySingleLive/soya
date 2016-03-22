@@ -1,16 +1,22 @@
 package org.soya.tools;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * @author: Jun Gong
  */
 public class Properties {
 
     public static String getVersion() {
-        return "1.0.1-alpha";
+        return "1.0.2-alpha";
     }
 
     public static String getCompilerName() {
-        return "soya";
+        return "Soya";
     }
 
     public static String getCommandName() {
@@ -18,11 +24,18 @@ public class Properties {
     }
 
     public static String getBuildDate() {
-        return "2014";
+        Date date = new Date();
+        DateFormat format = new SimpleDateFormat("MM.yyyy");
+        return format.format(date);
+    }
+
+    public static String getCopyright() {
+        return "Copyright (c) 2013-" +  new SimpleDateFormat("yyyy").format(new Date()) + " Jun Gong";
     }
 
     public static String getVersionString() {
-        return getCompilerName() + " " + getVersion() + " (" + getBuildDate() + ")";
+        return getCompilerName() + " version \"" + getVersion() + "\" [build " + getBuildDate() + "]\n" +
+                getCopyright();
     }
 
     public static String getHelpString() {
