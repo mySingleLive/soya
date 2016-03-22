@@ -87,18 +87,3 @@ users.each {
 }
 
 
-
-send({
-   url: http://192.168.10.55:8080/activity/phh/userOrderList
-   type: 'POST'
-   header:
-       userId: 1
-       zjtoken: 'kfalfjaefleal'
-   body: """
-       { "page": 1, "pageSize": 10}
-   """
-   success: #(data) {
-       println('查询C端用户订单记录：')
-       println(data)
-   }
-})
